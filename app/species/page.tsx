@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   description: 'Browse 48+ freshwater and saltwater fish species profiles. Filter A–Z, find water parameters, tank size, diet, and care difficulty for every species.',
 }
 
+// The DB isn't reachable during the platform's Docker build step, so this
+// page must render per-request rather than being statically generated.
+export const dynamic = 'force-dynamic'
+
 export default async function SpeciesIndexPage() {
   const species = await getAllSpecies()
 

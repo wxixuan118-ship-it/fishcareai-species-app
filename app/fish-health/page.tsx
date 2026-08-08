@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   },
 }
 
+// The DB isn't reachable during the platform's Docker build step, so this
+// page must render per-request rather than being statically generated.
+export const dynamic = 'force-dynamic'
+
 const CATEGORY_META: Record<ProblemCategory, { label: string; icon: string; desc: string }> = {
   behavioral: {
     label: 'Behavioral',

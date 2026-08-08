@@ -3,6 +3,10 @@ import { getAllSpeciesSlugs, getAllGuidesSlugs } from '@/lib/species'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
+// The DB isn't reachable during the platform's Docker build step, so the
+// sitemap must be generated per-request rather than at build time.
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [encyclopediaSlugs, guideSlugs] = await Promise.all([
     getAllSpeciesSlugs(),

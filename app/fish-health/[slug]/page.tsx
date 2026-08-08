@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import {
   getFishHealthPage,
-  getAllHealthSlugs,
   getRelatedHealthPages,
 } from '@/lib/fish-health'
 import HealthHero        from '@/components/HealthHero'
@@ -16,6 +15,10 @@ import TableOfContents   from '@/components/TableOfContents'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
+// The DB isn't reachable during the platform's Docker build step, so these
+// pages must render per-request rather than being statically generated.
+export const dynamic = 'force-dynamic'
+
 const TOC_ITEMS = [
   { id: 'causes',       label: 'Common Causes' },
   { id: 'diagnose',     label: 'How to Diagnose' },
@@ -25,12 +28,6 @@ const TOC_ITEMS = [
   { id: 'related',      label: 'Related Problems' },
   { id: 'faq',          label: 'FAQ' },
 ]
-
-// ── Static params (build-time pre-render) ─────────────────────────────────────
-export async function generateStaticParams() {
-  const slugs = await getAllHealthSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
 
 // ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata(

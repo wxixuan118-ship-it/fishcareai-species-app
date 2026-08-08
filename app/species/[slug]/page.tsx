@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getSpeciesBySlug, getAllSpeciesSlugs } from '@/lib/species'
+import { getSpeciesBySlug } from '@/lib/species'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -9,6 +9,10 @@ import CalloutBox from '@/components/CalloutBox'
 import RelatedSpeciesLinks from '@/components/RelatedSpeciesLinks'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
+
+// The DB isn't reachable during the platform's Docker build step, so these
+// pages must render per-request rather than being statically generated.
+export const dynamic = 'force-dynamic'
 
 const TOC_ITEMS = [
   { id: 'overview',        label: 'Overview' },
@@ -20,12 +24,6 @@ const TOC_ITEMS = [
   { id: 'facts',           label: 'Interesting Facts' },
   { id: 'related',         label: 'Related Species' },
 ]
-
-// ── Static params (build-time) ────────────────────────────────────────────────
-export async function generateStaticParams() {
-  const slugs = await getAllSpeciesSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
 
 // ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata(
