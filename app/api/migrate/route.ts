@@ -102,8 +102,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'SUPABASE_DATABASE_URL not set' }, { status: 500 })
   }
 
-  const src = postgres(srcUrl, { ssl: 'require', max: 2, prepare: false, idle_timeout: 30 })
-  const dst = postgres(process.env.DATABASE_URL!, { ssl: 'require', max: 2, prepare: false, idle_timeout: 30 })
+  // Parse URL manually so special chars in password (e.g. *) aren't lost by URL encoding
+  const parsedSrc = new URL(srcUrl)
+  const src = postgres({
+    host:     parsedSrc.hostname,
+    port:     Number(parsedSrc.port) || 5432,
+    database: parsedSrc.pathname.replace(/^\//, ''),
+    user:     decodeURIComponent(parsedSrc.username),
+    password: decodeURIComponent(parsedSrc.password),
+    ssl: 'require',
+    max: 2,
+    prepare: false,
+    idle_timeout: 30,
+  })
+
+  const dstRaw = process.env.DATABASE_URL!
+  const parsedDst = new URL(dstRaw)
+  parsedDst.searchParams.delete('pgbouncer')
+  const dst = postgres(parsedDst.toString(), { ssl: 'require', max: 2, prepare: false, idle_timeout: 30 })
 
   const log: string[] = []
 
