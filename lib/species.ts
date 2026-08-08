@@ -20,8 +20,13 @@ export async function getSpeciesGuide(slug: string): Promise<{ species: Species;
   return { species, guide }
 }
 
-export async function getAllSpecies() {
-  return await sql`
+type SpeciesSummary = Pick<
+  Species,
+  'slug' | 'common_name' | 'scientific_name' | 'water_type' | 'difficulty_level' | 'family'
+>
+
+export async function getAllSpecies(): Promise<SpeciesSummary[]> {
+  return await sql<SpeciesSummary[]>`
     SELECT slug, common_name, scientific_name, water_type, difficulty_level, family
     FROM species WHERE published = true ORDER BY common_name
   `

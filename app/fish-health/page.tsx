@@ -47,7 +47,7 @@ type ProblemRow = {
 }
 
 export default async function FishHealthHubPage() {
-  const problems = (await getAllHealthProblems()) as ProblemRow[]
+  const problems = await getAllHealthProblems()
 
   const grouped = problems.reduce<Record<ProblemCategory, ProblemRow[]>>(
     (acc, p) => {

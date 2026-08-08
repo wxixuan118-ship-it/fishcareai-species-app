@@ -81,8 +81,13 @@ export async function getHealthPagesByFish(fishSlug: string): Promise<HealthPage
   }))
 }
 
-export async function getAllHealthProblems() {
-  return await sql`
+type HealthProblemSummary = Pick<
+  HealthProblem,
+  'id' | 'slug' | 'problem_name' | 'category' | 'description' | 'urgency'
+>
+
+export async function getAllHealthProblems(): Promise<HealthProblemSummary[]> {
+  return await sql<HealthProblemSummary[]>`
     SELECT id, slug, problem_name, category, description, urgency
     FROM health_problems
     WHERE published = true
