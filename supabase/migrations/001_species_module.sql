@@ -125,33 +125,10 @@ CREATE TRIGGER trg_species_guides_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
--- ──────────────────────────────────────────────────────────
--- ROW LEVEL SECURITY
--- ──────────────────────────────────────────────────────────
-ALTER TABLE species        ENABLE ROW LEVEL SECURITY;
-ALTER TABLE species_guides ENABLE ROW LEVEL SECURITY;
-
--- Public read (anon key): published rows only
-DROP POLICY IF EXISTS "anon can read published species" ON species;
-CREATE POLICY "anon can read published species"
-  ON species FOR SELECT TO anon
-  USING (published = true);
-
-DROP POLICY IF EXISTS "anon can read published guides" ON species_guides;
-CREATE POLICY "anon can read published guides"
-  ON species_guides FOR SELECT TO anon
-  USING (published = true);
-
--- Authenticated (admin dashboard): full access
-DROP POLICY IF EXISTS "authenticated full access species" ON species;
-CREATE POLICY "authenticated full access species"
-  ON species FOR ALL TO authenticated
-  USING (true) WITH CHECK (true);
-
-DROP POLICY IF EXISTS "authenticated full access guides" ON species_guides;
-CREATE POLICY "authenticated full access guides"
-  ON species_guides FOR ALL TO authenticated
-  USING (true) WITH CHECK (true);
+-- Note: no Row Level Security here — this app connects with a single
+-- trusted Postgres role (not Supabase's anon/authenticated split) and
+-- enforces `published = true` filtering in application-level queries
+-- (see lib/species.ts).
 
 
 -- ──────────────────────────────────────────────────────────
