@@ -128,6 +128,10 @@ export async function POST(req: NextRequest) {
     await dst.unsafe(SCHEMA)
     log.push('Schema ready')
 
+    // Clear existing data (FK order: guides first, then species)
+    await dst.unsafe('TRUNCATE TABLE fish_health_content, species_guides, species RESTART IDENTITY CASCADE')
+    log.push('Cleared existing data')
+
     // ── species ────────────────────────────────────────────────────────────────
     log.push('Reading species from Supabase...')
     const speciesRows = await src`SELECT * FROM species ORDER BY created_at`
