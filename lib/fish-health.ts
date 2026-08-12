@@ -94,3 +94,28 @@ export async function getAllHealthProblems(): Promise<HealthProblemSummary[]> {
     ORDER BY category, problem_name
   `
 }
+
+export type HealthSpeciesSummary = {
+  slug: string
+  common_name: string
+  scientific_name: string
+  health_page_count: number
+  first_health_slug: string
+}
+
+export async function getHealthSpeciesList(): Promise<HealthSpeciesSummary[]> {
+  const rows = await sql<HealthSpeciesSummary[]>`
+    SELECT
+      s.slug,
+      s.common_name,
+      s.scientific_name,
+      COUNT(fhc.id)::int AS health_page_count,
+      MIN(fhc.slug)      AS first_health_slug
+    FROM fish_health_content fhc
+    JOIN species s ON fhc.fish_id = s.id
+    WHERE fhc.published = true
+    GROUP BY s.slug, s.common_name, s.scientific_name
+    ORDER BY s.common_name
+  `
+  return rows
+}

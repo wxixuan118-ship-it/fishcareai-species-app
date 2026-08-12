@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getAllHealthProblems } from '@/lib/fish-health'
+import { getAllHealthProblems, getHealthSpeciesList } from '@/lib/fish-health'
 import type { ProblemCategory, Urgency } from '@/types/fish-health'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
@@ -51,7 +51,10 @@ type ProblemRow = {
 }
 
 export default async function FishHealthHubPage() {
-  const problems = await getAllHealthProblems()
+  const [problems, speciesList] = await Promise.all([
+    getAllHealthProblems(),
+    getHealthSpeciesList(),
+  ])
 
   const grouped = problems.reduce<Record<ProblemCategory, ProblemRow[]>>(
     (acc, p) => {
@@ -128,6 +131,45 @@ export default async function FishHealthHubPage() {
             </section>
           )
         })}
+
+        {/* Browse by Fish Species */}
+        <section style={{ marginBottom: 52 }}>
+          <h2 style={{ borderTop: 'none', paddingTop: 0 }}>Browse by Fish Species</h2>
+          <p style={{ marginBottom: 20 }}>
+            Select your fish species to see all available health guides for that species.
+          </p>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: 10,
+          }}>
+            {speciesList.map((s) => (
+              <a
+                key={s.slug}
+                href={`/fish-health/fish/${s.slug}`}
+                style={{
+                  display: 'block',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--bd)',
+                  borderRadius: 8,
+                  padding: '10px 14px',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--tx)', marginBottom: 2 }}>
+                  {s.common_name}
+                </div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--tx2)', fontStyle: 'italic', marginBottom: 4 }}>
+                  {s.scientific_name}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--p)' }}>
+                  {s.health_page_count} guides →
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* CTA */}
         <div className="cta-box">
