@@ -28,6 +28,34 @@ const TOC_ITEMS = [
   { id: 'faq',          label: 'FAQ' },
 ]
 
+// Hand-tuned titles/descriptions for high-traffic pages (overrides DB values)
+const META_OVERRIDES: Record<string, { title: string; description: string }> = {
+  discus: {
+    title:       'Discus Fish Care Guide: Tank Size, Water, Food & Setup',
+    description: 'Discus need 55+ gallon tanks, 82–88°F soft water, and feeding 3× daily. Exact water parameters, filtration, tank mates, and setup tips for keeping discus successfully.',
+  },
+  molly: {
+    title:       'Molly Fish Care Guide: Tank Size, Types & Breeding',
+    description: 'Mollies thrive in 20+ gallon tanks at pH 7.5–8.5 and tolerate brackish water. Covers all color types, feeding, live-bearer breeding tips, and compatible tank mates.',
+  },
+  swordtail: {
+    title:       'Swordtail Fish Care & Breeding Guide',
+    description: 'Swordtails need a 20+ gallon tank, pH 7.0–8.3, and plant cover for fry. Complete care and breeding guide for Xiphophorus hellerii in home aquariums.',
+  },
+  koi: {
+    title:       'Koi Fish Care Guide for Beginners',
+    description: 'Koi need 250+ gallons (1,000+ for ponds), 59–77°F water, and feeding twice daily. Beginner-friendly pond setup, feeding schedule, water quality, and common health issues.',
+  },
+  oscar: {
+    title:       'Oscar Fish Size: How Big Do They Get? + Full Care Guide',
+    description: 'Oscars grow 12–14 inches and need a 75+ gallon tank on their own. Learn true adult size, feeding schedule, aggression management, and compatible tank mates.',
+  },
+  angelfish: {
+    title:       'Angelfish Care Guide: Tank Mates & Feeding',
+    description: 'Angelfish need 30+ gallon tall tanks, pH 6.5–7.5, and 76–84°F water. Covers compatible tank mates, ideal feeding frequency, water requirements, and breeding basics.',
+  },
+}
+
 // ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata(
   { params }: { params: { slug: string } }
@@ -36,8 +64,9 @@ export async function generateMetadata(
   if (!result) return { title: 'Care Guide Not Found' }
 
   const { species, guide } = result
-  const title       = guide.meta_title       ?? species.meta_title       ?? `${species.common_name} Care Guide: Tank Setup, Feeding & Disease | FishCare AI`
-  const description = guide.meta_description ?? species.meta_description ?? `Complete ${species.common_name} care guide covering tank setup, water parameters, feeding schedule, tank mates, common diseases, and breeding for ${species.scientific_name}.`
+  const override    = META_OVERRIDES[params.slug]
+  const title       = override?.title       ?? guide.meta_title       ?? species.meta_title       ?? `${species.common_name} Care Guide: Tank Setup, Feeding & Disease | FishCare AI`
+  const description = override?.description ?? guide.meta_description ?? species.meta_description ?? `Complete ${species.common_name} care guide covering tank setup, water parameters, feeding schedule, tank mates, common diseases, and breeding for ${species.scientific_name}.`
   const canonical   = `${SITE_URL}/species/${species.slug}/care-guide`
 
   return {
