@@ -26,7 +26,7 @@ type AnyPool = { query(text: string, values?: unknown[]): Promise<{ rows: unknow
 // lib/species.ts and lib/fish-health.ts use this without changes.
 export function makeSql(client: AnyPool) {
   // T is the full return type (e.g. Species[]), matching postgres.js convention
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   async function sql<T extends any[] = Record<string, any>[]>(
     strings: TemplateStringsArray,
     ...values: unknown[]
@@ -45,7 +45,7 @@ export function makeSql(client: AnyPool) {
     return result.rows as Record<string, unknown>[]
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   sql.json = (value: unknown): any => (value === undefined ? null : value)
 
   return sql
