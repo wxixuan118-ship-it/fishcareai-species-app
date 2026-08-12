@@ -45,8 +45,10 @@ export function makeSql(client: AnyPool) {
     return result.rows as Record<string, unknown>[]
   }
 
+  // Always stringify so pg sends a JSON string, not a PostgreSQL array literal ({}).
+  // pg formats JS arrays as {} (array syntax) which PostgreSQL rejects for JSONB.
   // eslint-disable-next-line
-  sql.json = (value: unknown): any => (value === undefined ? null : value)
+  sql.json = (value: unknown): any => (value == null ? null : JSON.stringify(value))
 
   return sql
 }
