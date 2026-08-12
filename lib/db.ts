@@ -7,6 +7,7 @@ let connectionString = rawUrl
 if (rawUrl) {
   const url = new URL(rawUrl)
   url.searchParams.delete('pgbouncer')
+  url.searchParams.delete('sslmode')
   connectionString = url.toString()
 }
 

@@ -119,6 +119,7 @@ export async function POST(req: NextRequest) {
   const dstRaw = process.env.DATABASE_URL!
   const parsedDst = new URL(dstRaw)
   parsedDst.searchParams.delete('pgbouncer')
+  parsedDst.searchParams.delete('sslmode')
   const dst = postgres(parsedDst.toString(), { ssl: 'require', max: 2, prepare: false, idle_timeout: 30 })
 
   const log: string[] = []
