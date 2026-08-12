@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import postgres from 'postgres'
+import { Pool } from 'pg'
+import { makeSql } from '@/lib/db'
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS species (
@@ -102,25 +103,31 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'SUPABASE_DATABASE_URL not set' }, { status: 500 })
   }
 
-  // Parse URL manually so special chars in password (e.g. *) aren't lost by URL encoding
+  // Parse URL manually so special chars in password (e.g. @) survive
   const parsedSrc = new URL(srcUrl)
-  const src = postgres({
+  const srcPool = new Pool({
     host:     parsedSrc.hostname,
     port:     Number(parsedSrc.port) || 5432,
     database: parsedSrc.pathname.replace(/^\//, ''),
     user:     decodeURIComponent(parsedSrc.username),
     password: decodeURIComponent(parsedSrc.password),
-    ssl: 'require',
-    max: 2,
-    prepare: false,
-    idle_timeout: 30,
+    ssl:      { rejectUnauthorized: false },
+    max:      2,
+    idleTimeoutMillis: 30_000,
   })
+  const src = makeSql(srcPool)
 
   const dstRaw = process.env.DATABASE_URL!
   const parsedDst = new URL(dstRaw)
   parsedDst.searchParams.delete('pgbouncer')
   parsedDst.searchParams.delete('sslmode')
-  const dst = postgres(parsedDst.toString(), { ssl: 'require', max: 2, prepare: false, idle_timeout: 30 })
+  const dstPool = new Pool({
+    connectionString: parsedDst.toString(),
+    ssl: { rejectUnauthorized: false },
+    max: 2,
+    idleTimeoutMillis: 30_000,
+  })
+  const dst = makeSql(dstPool)
 
   const log: string[] = []
 
@@ -304,7 +311,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     return NextResponse.json({ error: String(err), log }, { status: 500 })
   } finally {
-    await src.end()
-    await dst.end()
+    await srcPool.end()
+    await dstPool.end()
   }
 }
