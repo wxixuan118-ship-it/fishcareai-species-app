@@ -223,17 +223,16 @@ export async function POST(req: NextRequest) {
     // ── health_problems (may not exist in Supabase) ────────────────────────────
     let problemsOk = 0
     try {
-      const problemRows = await src`SELECT * FROM health_problems ORDER BY created_at`
+      // ORDER BY id since created_at may not exist in Supabase's health_problems
+      const problemRows = await src`SELECT * FROM health_problems ORDER BY id`
       log.push(`Found ${problemRows.length} health_problem rows`)
       for (const r of problemRows) {
         await dst`
           INSERT INTO health_problems (
-            id, slug, problem_name, category, description, urgency,
-            published, created_at, updated_at
+            id, slug, problem_name, category, description, urgency, published
           ) VALUES (
             ${r.id}, ${r.slug}, ${r.problem_name}, ${r.category ?? null},
-            ${r.description ?? null}, ${r.urgency ?? null},
-            ${r.published}, ${r.created_at}, ${r.updated_at}
+            ${r.description ?? null}, ${r.urgency ?? null}, ${r.published}
           )
           ON CONFLICT (id) DO UPDATE SET
             slug         = EXCLUDED.slug,
@@ -241,8 +240,7 @@ export async function POST(req: NextRequest) {
             category     = EXCLUDED.category,
             description  = EXCLUDED.description,
             urgency      = EXCLUDED.urgency,
-            published    = EXCLUDED.published,
-            updated_at   = EXCLUDED.updated_at
+            published    = EXCLUDED.published
         `
         problemsOk++
       }
@@ -251,43 +249,46 @@ export async function POST(req: NextRequest) {
       log.push(`health_problems skipped: ${String(e).slice(0, 120)}`)
     }
 
-    // ── fish_health_content (may not exist in Supabase) ────────────────────────
+    // ── fish_health_content — batch 100 rows at a time ────────────────────────
     let healthOk = 0
     try {
-      const healthRows = await src`SELECT * FROM fish_health_content ORDER BY created_at`
+      const healthRows = await src`SELECT * FROM fish_health_content ORDER BY id`
       log.push(`Found ${healthRows.length} fish_health_content rows`)
-      for (const r of healthRows) {
-        await dst`
-          INSERT INTO fish_health_content (
-            id, fish_id, problem_id, slug, intro, common_causes,
-            diagnosis_steps, treatment_steps, prevention, when_to_seek_help,
-            related_slugs, faq, meta_title, meta_description,
-            published, created_at, updated_at
-          ) VALUES (
-            ${r.id}, ${r.fish_id ?? null}, ${r.problem_id ?? null},
-            ${r.slug}, ${r.intro ?? null},
-            ${dst.json(r.common_causes ?? [])}, ${dst.json(r.diagnosis_steps ?? [])},
-            ${dst.json(r.treatment_steps ?? [])}, ${r.prevention ?? null},
-            ${r.when_to_seek_help ?? null}, ${r.related_slugs ?? []},
-            ${dst.json(r.faq ?? [])}, ${r.meta_title ?? null},
-            ${r.meta_description ?? null}, ${r.published}, ${r.created_at}, ${r.updated_at}
-          )
-          ON CONFLICT (id) DO UPDATE SET
-            slug              = EXCLUDED.slug,
-            intro             = EXCLUDED.intro,
-            common_causes     = EXCLUDED.common_causes,
-            diagnosis_steps   = EXCLUDED.diagnosis_steps,
-            treatment_steps   = EXCLUDED.treatment_steps,
-            prevention        = EXCLUDED.prevention,
-            when_to_seek_help = EXCLUDED.when_to_seek_help,
-            related_slugs     = EXCLUDED.related_slugs,
-            faq               = EXCLUDED.faq,
-            meta_title        = EXCLUDED.meta_title,
-            meta_description  = EXCLUDED.meta_description,
-            published         = EXCLUDED.published,
-            updated_at        = EXCLUDED.updated_at
-        `
-        healthOk++
+
+      const BATCH = 100
+      for (let i = 0; i < healthRows.length; i += BATCH) {
+        const chunk = healthRows.slice(i, i + BATCH)
+        for (const r of chunk) {
+          await dst`
+            INSERT INTO fish_health_content (
+              id, fish_id, problem_id, slug, intro, common_causes,
+              diagnosis_steps, treatment_steps, prevention, when_to_seek_help,
+              related_slugs, faq, meta_title, meta_description, published
+            ) VALUES (
+              ${r.id}, ${r.fish_id ?? null}, ${r.problem_id ?? null},
+              ${r.slug}, ${r.intro ?? null},
+              ${dst.json(r.common_causes ?? [])}, ${dst.json(r.diagnosis_steps ?? [])},
+              ${dst.json(r.treatment_steps ?? [])}, ${r.prevention ?? null},
+              ${r.when_to_seek_help ?? null}, ${r.related_slugs ?? []},
+              ${dst.json(r.faq ?? [])}, ${r.meta_title ?? null},
+              ${r.meta_description ?? null}, ${r.published}
+            )
+            ON CONFLICT (id) DO UPDATE SET
+              slug              = EXCLUDED.slug,
+              intro             = EXCLUDED.intro,
+              common_causes     = EXCLUDED.common_causes,
+              diagnosis_steps   = EXCLUDED.diagnosis_steps,
+              treatment_steps   = EXCLUDED.treatment_steps,
+              prevention        = EXCLUDED.prevention,
+              when_to_seek_help = EXCLUDED.when_to_seek_help,
+              related_slugs     = EXCLUDED.related_slugs,
+              faq               = EXCLUDED.faq,
+              meta_title        = EXCLUDED.meta_title,
+              meta_description  = EXCLUDED.meta_description,
+              published         = EXCLUDED.published
+          `
+          healthOk++
+        }
       }
       log.push(`Migrated ${healthOk} fish_health_content`)
     } catch (e) {
