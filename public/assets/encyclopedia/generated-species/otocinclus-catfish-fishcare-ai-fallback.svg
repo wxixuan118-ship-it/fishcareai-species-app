@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Otocinclus Catfish aquarium illustration">
+<rect width="1200" height="720" fill="#dff7ff"/>
+<circle cx="160" cy="120" r="16" fill="#ffffff" opacity="0.5"/><circle cx="245" cy="220" r="9" fill="#ffffff" opacity="0.5"/><circle cx="1010" cy="160" r="14" fill="#ffffff" opacity="0.5"/>
+<path d="M90 710 C120 560 145 465 205 340 C245 470 242 600 220 710 Z" fill="#15965f"/>
+<path d="M980 710 C965 575 1005 455 1085 325 C1125 475 1108 610 1068 710 Z" fill="#18a86a"/>
+<ellipse cx="600" cy="708" rx="610" ry="42" fill="#d7c8a4" opacity="0.58"/>
+<g>
+<path d="M315 360 C200 270 145 255 70 235 C145 315 170 350 70 475 C170 440 220 425 315 360 Z" fill="#334155" opacity="0.92"/>
+<ellipse cx="590" cy="360" rx="310" ry="125" fill="#84cc16"/>
+<path d="M470 252 C560 145 720 160 820 260 C680 245 570 248 470 252 Z" fill="#334155" opacity="0.78"/>
+<path d="M520 470 C610 585 760 555 820 455 C690 485 600 492 520 470 Z" fill="#334155" opacity="0.62"/>
+<path d="M390 300 L440 455" stroke="#dcfce7" stroke-width="24" opacity="0.75"/>
+<path d="M505 255 L555 485" stroke="#dcfce7" stroke-width="22" opacity="0.62"/>
+<path d="M645 252 L690 475" stroke="#dcfce7" stroke-width="20" opacity="0.52"/>
+<circle cx="845" cy="330" r="30" fill="#ffffff"/>
+<circle cx="854" cy="330" r="15" fill="#111827"/>
+<circle cx="860" cy="322" r="5" fill="#ffffff"/>
+<path d="M880 392 C930 410 980 400 1018 365" stroke="#113044" stroke-width="10" fill="none" opacity="0.4"/>
+</g>
+</svg>

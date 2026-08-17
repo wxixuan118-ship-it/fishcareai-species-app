@@ -94,91 +94,22 @@ p:last-child { margin-bottom: 0; }
 .hbg-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hbg-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── Dropdown groups ───────────────────────────────────────── */
-.nb-trigger {
-  display: flex;
+/* ── CTA button ────────────────────────────────────────────── */
+.nb-cta {
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
-}
-.nb-caret {
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-.nb-group:hover .nb-caret,
-.nb-group.open .nb-caret { transform: rotate(180deg); }
-
-/* Dropdown panel */
-.nb-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(-6px);
-  min-width: 220px;
-  background: #fff;
-  border: 1px solid var(--bd);
-  border-radius: 14px;
-  padding: 8px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
-  z-index: 200;
-  white-space: nowrap;
-  /* hidden via visibility so CSS transitions work */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
-}
-/* triangle pointer */
-.nb-dropdown::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 10px;
-  height: 6px;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  background: var(--bd);
-}
-.nb-dropdown::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 5px;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  background: #fff;
-}
-
-/* Desktop: show on hover OR when .open (click-to-keep) */
-@media (min-width: 761px) {
-  .nb-group { position: relative; }
-  .nb-group:hover .nb-dropdown,
-  .nb-group.open  .nb-dropdown {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
-  }
-}
-
-/* Dropdown items */
-.nd-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 8px 12px;
-  border-radius: 9px;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--tx);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2E9E7D, #1B7A5E);
+  color: #fff;
   text-decoration: none;
-  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+  transition: all 0.18s;
+  margin-left: 6px;
 }
-.nd-item:hover { background: rgba(27, 94, 139, 0.08); color: var(--p); }
-.nd-icon { font-size: 1rem; flex-shrink: 0; }
+.nb-cta:hover { background: linear-gradient(135deg, #269070, #155C48); transform: translateY(-1px); }
 
 @media (max-width: 760px) {
   .nlinks {
@@ -196,38 +127,9 @@ p:last-child { margin-bottom: 0; }
   }
   .nlinks.open { display: flex; }
   .hbg { display: flex; }
-
-  /* Mobile: all top-level links also white */
   .nlinks .nl { color: rgba(255, 255, 255, 0.75); }
   .nlinks .nl:hover, .nlinks .nl.act { color: #fff; background: rgba(255, 255, 255, 0.1); }
-
-  /* Mobile dropdown: inline expand, dark-tinted */
-  .nb-group { width: 100%; }
-  .nb-trigger { width: 100%; justify-content: space-between; }
-  .nb-dropdown {
-    /* reset desktop visibility approach — use display on mobile */
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition: none;
-    /* mobile layout */
-    position: static;
-    transform: none;
-    box-shadow: none;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.07);
-    padding: 6px 4px;
-    margin-top: 2px;
-    white-space: normal;
-  }
-  .nb-dropdown::before,
-  .nb-dropdown::after { display: none; }
-  .nb-group.open .nb-dropdown { display: block; }
-  /* Mobile dropdown items: white text on dark bg */
-  .nlinks .nd-item { font-size: 0.83rem; padding: 7px 10px; color: rgba(255, 255, 255, 0.82); }
-  .nlinks .nd-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+  .nlinks .nb-cta { margin-left: 0; width: 100%; justify-content: center; }
 }
 
 /* ── Hero ─────────────────────────────────────────────────── */

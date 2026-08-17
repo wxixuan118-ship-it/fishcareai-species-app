@@ -21,8 +21,8 @@ const WATER_TYPE_LABEL: Record<string, string> = {
 }
 
 export default function SpeciesHero({ species }: Props) {
-  const imgSrc = `${SITE_URL}/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`
-  const fallbackSrc = `${SITE_URL}/assets/encyclopedia/generated-species/${species.slug}-fishcare-ai-fallback.svg`
+  const imgSrc = `/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`
+  const fallbackSrc = `/assets/encyclopedia/generated-species/${species.slug}-fishcare-ai-fallback.svg`
 
   const waterLabel = species.water_type ? WATER_TYPE_LABEL[species.water_type] : 'Freshwater'
   const diffLabel  = species.difficulty_level ? DIFFICULTY_LABEL[species.difficulty_level] : ''
