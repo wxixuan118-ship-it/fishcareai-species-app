@@ -9,27 +9,28 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com
 type NavItem = {
   label: string
   href: string
-  internal?: boolean
-  accent?: boolean
+  internal?: boolean   // render as Next.js <Link>, active via pathname
+  activePath?: string  // override active-detection prefix (for external links covering an internal path)
 }
 
 const NAV: NavItem[] = [
   { label: 'Home',          href: SITE_URL },
   { label: 'Guides',        href: `${SITE_URL}/guides/` },
-  { label: 'Encyclopedia',  href: '/species/', internal: true },
-  { label: 'Fish Health',   href: '/fish-health/', internal: true },
-  { label: 'Fish Identify', href: 'https://fish-identification-d558af.anysites.app/', accent: true },
-  { label: 'Tools',         href: `${SITE_URL}/tools/` },
-  { label: 'About Us',      href: `${SITE_URL}/about/` },
-  { label: 'Contact',       href: `${SITE_URL}/contact/` },
+  { label: 'Encyclopedia',  href: `${SITE_URL}/wiki/`,                          activePath: '/species/' },
+  { label: 'Fish Health',   href: '/fish-health/',                               internal: true },
+  { label: 'Fish Identify', href: 'https://identify.fishcareai.com/' },
+  { label: 'Tools',         href: `${SITE_URL}/tools/fish-compatibility-checker/` },
+  { label: 'About',         href: `${SITE_URL}/about/` },
 ]
 
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  const isActive = (item: NavItem) =>
-    item.internal ? pathname.startsWith(item.href.split('?')[0]) : false
+  const isActive = (item: NavItem) => {
+    const checkPath = item.activePath ?? (item.internal ? item.href.split('?')[0] : null)
+    return checkPath ? pathname.startsWith(checkPath) : false
+  }
 
   const close = () => setMenuOpen(false)
 
@@ -61,8 +62,8 @@ export default function NavBar() {
             <a
               key={item.label}
               href={item.href}
-              className="nl"
-              style={item.accent ? { color: '#67e8f9' } : undefined}
+              className={`nl${isActive(item) ? ' act' : ''}`}
+              onClick={close}
             >
               {item.label}
             </a>
