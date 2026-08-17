@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const fishListingUrls: MetadataRoute.Sitemap = speciesList.map((s) => ({
-    url:             `${SITE_URL}/fish-health/fish/${s.slug}/`,
+    url:             `${SITE_URL}/fish-health/fish/${s.slug}`,
     lastModified:    new Date(),
     changeFrequency: 'monthly',
     priority:        0.75,
@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url:             `${SITE_URL}/fish-health/`,
+      url:             `${SITE_URL}/fish-health`,
       lastModified:    new Date(),
       changeFrequency: 'weekly',
       priority:        0.7,

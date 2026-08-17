@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     'Identify and treat common fish health problems. Browse 30+ symptoms by category — behavioral, physical, and disease — with step-by-step diagnosis and treatment guides.',
   alternates: {
-    canonical: `${SITE_URL}/fish-health/`,
+    canonical: `${SITE_URL}/fish-health`,
   },
 }
 

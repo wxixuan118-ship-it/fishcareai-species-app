@@ -23,7 +23,7 @@ export async function generateMetadata(
   return {
     title: `${species.common_name} Health Problems & Symptoms | FishCare AI`,
     description: `Browse all common health problems and symptoms for ${species.common_name} (${species.scientific_name}). Step-by-step diagnosis and treatment guides.`,
-    alternates: { canonical: `${SITE_URL}/fish-health/fish/${params.slug}/` },
+    alternates: { canonical: `${SITE_URL}/fish-health/fish/${params.slug}` },
   }
 }
 
