@@ -10,16 +10,18 @@ type NavItem = {
   label: string
   href: string
   internal?: boolean
+  accent?: boolean
 }
 
 const NAV: NavItem[] = [
-  { label: 'Home',        href: SITE_URL },
-  { label: 'Guides',      href: `${SITE_URL}/guides/` },
-  { label: 'Encyclopedia',href: '/species/', internal: true },
-  { label: 'Fish Health', href: '/fish-health/', internal: true },
-  { label: 'Tools',       href: `${SITE_URL}/tools/` },
-  { label: 'About Us',    href: `${SITE_URL}/about/` },
-  { label: 'Contact',     href: `${SITE_URL}/contact/` },
+  { label: 'Home',          href: SITE_URL },
+  { label: 'Guides',        href: `${SITE_URL}/guides/` },
+  { label: 'Encyclopedia',  href: '/species/', internal: true },
+  { label: 'Fish Health',   href: '/fish-health/', internal: true },
+  { label: 'Fish Identify', href: 'https://fish-identification-d558af.anysites.app/', accent: true },
+  { label: 'Tools',         href: `${SITE_URL}/tools/` },
+  { label: 'About Us',      href: `${SITE_URL}/about/` },
+  { label: 'Contact',       href: `${SITE_URL}/contact/` },
 ]
 
 export default function NavBar() {
@@ -56,7 +58,12 @@ export default function NavBar() {
               {item.label}
             </Link>
           ) : (
-            <a key={item.label} href={item.href} className="nl">
+            <a
+              key={item.label}
+              href={item.href}
+              className="nl"
+              style={item.accent ? { color: '#67e8f9' } : undefined}
+            >
               {item.label}
             </a>
           )
