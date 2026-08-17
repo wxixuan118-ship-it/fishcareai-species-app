@@ -226,62 +226,75 @@ p:last-child { margin-bottom: 0; }
 
 /* ── Quick Facts Card (sidebar) ───────────────────────────── */
 .qf-card {
-  background: #fff;
+  background: rgba(6,28,45,.82);
   border-radius: 14px;
-  border: 1px solid var(--bd);
+  border: 1px solid rgba(125,235,255,.18);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(27,94,139,.07);
+  box-shadow: 0 2px 12px rgba(0,10,22,.28);
   margin-bottom: 20px;
 }
 .qf-head {
-  background: var(--pd); color: #fff;
+  background: rgba(37,215,255,.12); color: #fff;
   padding: 12px 16px;
   font-size: 0.78rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(125,235,255,.16);
 }
 .qf-table { width: 100%; border-collapse: collapse; }
-.qf-table tr:not(:last-child) td { border-bottom: 1px solid var(--bd); }
-.qf-table td { padding: 9px 14px; font-size: 0.84rem; vertical-align: top; }
-.qf-table td:first-child { font-weight: 600; color: var(--tx); width: 42%; white-space: nowrap; }
-.qf-table td:last-child { color: var(--mu); }
+.qf-table tr:not(:last-child) td { border-bottom: 1px solid rgba(125,235,255,.12); }
+.qf-table td { padding: 9px 14px; font-size: 0.84rem; vertical-align: top; background: transparent; }
+.qf-table tr:nth-child(even) td { background: rgba(4,22,36,.5); }
+.qf-table td:first-child { font-weight: 600; color: rgba(234,251,255,.95); width: 42%; white-space: nowrap; }
+.qf-table td:last-child { color: rgba(220,246,255,.82); }
 
 /* ── Table of Contents (sidebar sticky) ──────────────────── */
 .toc-card {
-  background: var(--card-bg);
+  background: rgba(6,28,45,.8);
   border-radius: 14px;
-  border: 1px solid var(--bd);
+  border: 1px solid rgba(125,235,255,.16);
   padding: 16px;
   position: sticky;
   top: 80px;
 }
 .toc-card h4 {
-  color: var(--pd); margin-bottom: 10px;
+  color: rgba(234,251,255,.8); margin-bottom: 10px;
   font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
 }
 .toc-card a {
   display: block;
   padding: 4px 0 4px 10px;
-  font-size: 0.8rem; color: var(--mu);
+  font-size: 0.8rem; color: rgba(220,246,255,.72);
   border-left: 2px solid transparent;
   transition: all 0.15s;
 }
-.toc-card a:hover { color: var(--p); border-left-color: var(--p); }
+.toc-card a:hover { color: #7DEBFF; border-left-color: #7DEBFF; }
 
 /* ── Parameter table ──────────────────────────────────────── */
 .ptbl {
   width: 100%; border-collapse: collapse;
   border-radius: 12px; overflow: hidden;
-  border: 1px solid var(--bd);
+  border: 1px solid rgba(125,235,255,.18);
   margin: 14px 0 20px; font-size: 0.86rem;
 }
 .ptbl th {
-  background: var(--p); color: #fff;
+  background: #0F4D78; color: #fff;
   padding: 10px 13px; text-align: left;
   font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(125,235,255,.18);
 }
-.ptbl td { padding: 10px 13px; border-bottom: 1px solid var(--bd); color: var(--mu); }
+.ptbl td {
+  padding: 10px 13px;
+  border-bottom: 1px solid rgba(125,235,255,.12);
+  background: #0a2d4a;
+  color: rgba(220,246,255,.82);
+}
+.ptbl tr:nth-child(even) td { background: #072038; }
 .ptbl tr:last-child td { border-bottom: none; }
-.ptbl td:first-child { font-weight: 600; color: var(--tx); }
+.ptbl td:first-child { font-weight: 600; color: rgba(234,251,255,.95); }
+/* Responsive horizontal scroll on narrow screens */
+@media (max-width: 640px) {
+  .ptbl { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
 
 /* ── Badges ───────────────────────────────────────────────── */
 .bdg { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
