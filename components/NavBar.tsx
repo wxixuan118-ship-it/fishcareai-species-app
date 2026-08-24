@@ -16,11 +16,11 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { label: 'Home',          href: SITE_URL },
+  { label: 'Tools',         href: `${SITE_URL}/tools/fish-compatibility-checker/` },
   { label: 'Guides',        href: `${SITE_URL}/guides/` },
   { label: 'Encyclopedia',  href: `${SITE_URL}/species/`,                        activePath: '/species/' },
   { label: 'Fish Health',   href: '/fish-health/',                               internal: true, activePath: '/fish-health/' },
   { label: 'Fish Identify', href: 'https://identify.fishcareai.com/' },
-  { label: 'Tools',         href: `${SITE_URL}/tools/fish-compatibility-checker/` },
   { label: 'About',         href: `${SITE_URL}/about/` },
   { label: '📱 App',        href: `${SITE_URL}/app/`,                           extraClass: 'nl-app-btn' },
 ]
