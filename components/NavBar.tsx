@@ -11,16 +11,18 @@ type NavItem = {
   href: string
   internal?: boolean   // render as Next.js <Link>, active via pathname
   activePath?: string  // override active-detection prefix (for external links covering an internal path)
+  extraClass?: string  // additional CSS class(es) appended to the link
 }
 
 const NAV: NavItem[] = [
   { label: 'Home',          href: SITE_URL },
   { label: 'Guides',        href: `${SITE_URL}/guides/` },
-  { label: 'Encyclopedia',  href: `${SITE_URL}/wiki/`,                          activePath: '/species/' },
-  { label: 'Fish Health',   href: '/fish-health/',                               internal: true },
+  { label: 'Encyclopedia',  href: `${SITE_URL}/species/`,                        activePath: '/species/' },
+  { label: 'Fish Health',   href: '/fish-health/',                               internal: true, activePath: '/fish-health/' },
   { label: 'Fish Identify', href: 'https://identify.fishcareai.com/' },
   { label: 'Tools',         href: `${SITE_URL}/tools/fish-compatibility-checker/` },
   { label: 'About',         href: `${SITE_URL}/about/` },
+  { label: '📱 App',        href: `${SITE_URL}/app/`,                           extraClass: 'nl-app-btn' },
 ]
 
 export default function NavBar() {
@@ -48,27 +50,18 @@ export default function NavBar() {
       </a>
 
       <div className={`nlinks${menuOpen ? ' open' : ''}`} id="nlinks">
-        {NAV.map((item) =>
-          item.internal ? (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`nl${isActive(item) ? ' act' : ''}`}
-              onClick={close}
-            >
+        {NAV.map((item) => {
+          const cls = `nl${isActive(item) ? ' act' : ''}${item.extraClass ? ' ' + item.extraClass : ''}`
+          return item.internal ? (
+            <Link key={item.label} href={item.href} className={cls} onClick={close}>
               {item.label}
             </Link>
           ) : (
-            <a
-              key={item.label}
-              href={item.href}
-              className={`nl${isActive(item) ? ' act' : ''}`}
-              onClick={close}
-            >
+            <a key={item.label} href={item.href} className={cls} onClick={close}>
               {item.label}
             </a>
           )
-        )}
+        })}
         <a href={`${SITE_URL}/tools/fish-compatibility-checker/`} className="nb-cta" title="Try AI Free">
           Try AI Free
         </a>
