@@ -49,10 +49,12 @@ export default function HealthHero({
         <div className="breadcrumb">
           <a href={SITE_URL}>Home</a>
           <span>/</span>
-          <a href={`${SITE_URL}/fish-health/`}>Fish Health</a>
+          <a href={`${SITE_URL}/aquarium-fish-diseases/`}>Aquarium Fish Diseases</a>
+          <span>/</span>
+          <a href={`/fish-health/fish/${fishSlug}`}>{fishName}</a>
           <span>/</span>
           <span style={{ color: 'rgba(255,255,255,.85)' }}>
-            {fishName} — {problemName}
+            {problemName}
           </span>
         </div>
 

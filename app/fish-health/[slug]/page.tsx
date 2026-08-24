@@ -91,9 +91,10 @@ export default async function FishHealthDiagnosisPage(
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',        item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Fish Health',  item: `${SITE_URL}/fish-health/` },
-      { '@type': 'ListItem', position: 3, name: `${fishName} ${probName}`, item: canonical },
+      { '@type': 'ListItem', position: 1, name: 'Home',                    item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Aquarium Fish Diseases',  item: `${SITE_URL}/aquarium-fish-diseases/` },
+      { '@type': 'ListItem', position: 3, name: fishName,                  item: `${SITE_URL}/fish-health/fish/${species.slug}` },
+      { '@type': 'ListItem', position: 4, name: `${fishName} ${probName}`, item: canonical },
     ],
   }
 
@@ -304,7 +305,7 @@ export default async function FishHealthDiagnosisPage(
               </table>
             </div>
 
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 8 }}>
               <a
                 href={`/species/${species.slug}`}
                 style={{
@@ -320,6 +321,42 @@ export default async function FishHealthDiagnosisPage(
                 }}
               >
                 📖 View Species Profile
+              </a>
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <a
+                href={`/fish-health/fish/${species.slug}`}
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  padding: '10px',
+                  background: 'var(--card-bg)',
+                  border: '1px solid var(--bd)',
+                  borderRadius: '8px',
+                  fontSize: '0.84rem',
+                  color: 'var(--p)',
+                  fontWeight: 600,
+                }}
+              >
+                🩺 All {fishName} Health Problems
+              </a>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <a
+                href={`${SITE_URL}/aquarium-fish-diseases/`}
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  padding: '10px',
+                  background: 'var(--card-bg)',
+                  border: '1px solid var(--bd)',
+                  borderRadius: '8px',
+                  fontSize: '0.84rem',
+                  color: 'var(--p)',
+                  fontWeight: 600,
+                }}
+              >
+                🐠 Aquarium Fish Diseases Hub
               </a>
             </div>
 

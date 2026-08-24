@@ -38,15 +38,29 @@ export default async function FishHealthListPage(
   const pages = await getHealthPagesByFish(params.slug)
   if (!pages.length) notFound()
 
+  const canonical = `${SITE_URL}/fish-health/fish/${species.slug}`
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',                   item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Aquarium Fish Diseases', item: `${SITE_URL}/aquarium-fish-diseases/` },
+      { '@type': 'ListItem', position: 3, name: `${species.common_name} Health Problems`, item: canonical },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
       <section className="sp-hero" style={{ minHeight: 220 }}>
         <div className="sp-hero-overlay" style={{ background: 'linear-gradient(135deg, rgba(5,28,42,.92) 0%, rgba(11,50,80,.7) 100%)' }} />
         <div className="sp-hero-inner">
           <div className="breadcrumb">
             <a href={SITE_URL}>Home</a>
             <span>/</span>
-            <a href="/fish-health/">Fish Health</a>
+            <a href={`${SITE_URL}/aquarium-fish-diseases/`}>Aquarium Fish Diseases</a>
             <span>/</span>
             <span style={{ color: 'rgba(255,255,255,.85)' }}>{species.common_name}</span>
           </div>
@@ -59,9 +73,12 @@ export default async function FishHealthListPage(
       </section>
 
       <div className="con" style={{ padding: '36px 22px 60px' }}>
-        <div style={{ marginBottom: 24 }}>
+        <div style={{ marginBottom: 24, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <a href={`/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
             ← View full {species.common_name} care guide
+          </a>
+          <a href={`${SITE_URL}/aquarium-fish-diseases/`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
+            ← Aquarium Fish Diseases Hub
           </a>
         </div>
 
@@ -92,9 +109,9 @@ export default async function FishHealthListPage(
         </div>
 
         <div className="cta-box" style={{ marginTop: 48 }}>
-          <h4>Browse All Health Problems</h4>
-          <p>See all 30 fish health problem categories with guides for hundreds of species.</p>
-          <a className="btn" href="/fish-health/">View Health Hub →</a>
+          <h4>Browse All Fish Diseases</h4>
+          <p>See all 30 aquarium fish disease categories with diagnosis and treatment guides for hundreds of species.</p>
+          <a className="btn" href={`${SITE_URL}/aquarium-fish-diseases/`}>Aquarium Fish Diseases Hub →</a>
         </div>
       </div>
     </>
