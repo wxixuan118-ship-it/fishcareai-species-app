@@ -7,31 +7,39 @@ export default function Footer() {
         <div className="ftg">
           <div className="ftbr">
             <div className="logo">FishCare AI</div>
-            <p>Practical aquarium care guides, fish encyclopedia, and free tools for freshwater and saltwater fish keepers.</p>
+            <p>Practical aquarium care guides, fish encyclopedia, and free tools for freshwater and saltwater fishkeepers.</p>
           </div>
+
           <div className="ftcol">
-            <h5>Guides</h5>
-            <a href={`${SITE_URL}/guides/`}>All Guides</a>
-            <a href={`${SITE_URL}/guides/betta-fish-care/`}>Betta Fish</a>
-            <a href={`${SITE_URL}/guides/angelfish-care/`}>Angelfish</a>
-            <a href={`${SITE_URL}/guides/discus-fish-care-requirements/`}>Discus</a>
+            <h5>Explore</h5>
+            <a href={`${SITE_URL}/species/`}>Fish Species</a>
+            <a href={`${SITE_URL}/aquarium-fish-diseases/`}>Fish Diseases</a>
+            <a href={`${SITE_URL}/guides/`}>Guides</a>
+            <a href={`${SITE_URL}/tools/`}>Aquarium Tools</a>
+            <a href="https://identify.fishcareai.com/">Fish Identify</a>
           </div>
+
           <div className="ftcol">
-            <h5>Encyclopedia</h5>
-            <a href={`${SITE_URL}/species/`}>All Species</a>
-            <a href={`${SITE_URL}/species/paracheirodon-innesi`}>Neon Tetra</a>
-            <a href={`${SITE_URL}/species/corydoras-aeneus`}>Corydoras</a>
-            <a href={`${SITE_URL}/species/poecilia-reticulata`}>Guppy</a>
-          </div>
-          <div className="ftcol">
-            <h5>Tools</h5>
+            <h5>Popular Tools</h5>
             <a href={`${SITE_URL}/tools/fish-compatibility-checker/`}>Compatibility Checker</a>
             <a href={`${SITE_URL}/tools/tank-size-calculator/`}>Tank Size Calculator</a>
             <a href={`${SITE_URL}/tools/water-parameter-checker/`}>Water Parameters</a>
+            <a href={`${SITE_URL}/tools/fish-feeding-calculator/`}>Feeding Calculator</a>
+            <a href={`${SITE_URL}/tools/aquarium-planner/`}>Aquarium Planner</a>
+          </div>
+
+          <div className="ftcol">
+            <h5>Company</h5>
+            <a href={`${SITE_URL}/about/`}>About</a>
+            <a href={`${SITE_URL}/contact/`}>Contact</a>
+            <a href={`${SITE_URL}/privacy/`}>Privacy Policy</a>
+            <a href={`${SITE_URL}/terms/`}>Terms</a>
+            <a href={`${SITE_URL}/editorial-policy/`}>Editorial Policy</a>
           </div>
         </div>
+
         <div className="ftb">
-          © {new Date().getFullYear()} FishCare AI. Practical freshwater and saltwater fish care guides and tools.
+          © {new Date().getFullYear()} EverTrend LLC. FishCare AI is a product of EverTrend LLC. All rights reserved.
         </div>
         <nav className="legal-links" aria-label="Legal and company information">
           <a href={`${SITE_URL}/about/`}>About</a>

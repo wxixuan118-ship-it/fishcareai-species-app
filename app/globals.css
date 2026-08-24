@@ -4,21 +4,21 @@
    ================================================================ */
 
 :root {
-  --p:  #1B5E8B;  /* primary blue */
-  --pl: #2E84C0;  /* primary light */
-  --pd: #0F3D5E;  /* primary dark */
+  --p:  #2A9CD8;  /* primary blue */
+  --pl: #3BB3F0;  /* primary light */
+  --pd: #1A5A8A;  /* primary dark */
   --s:  #2E9E7D;  /* secondary green */
   --a:  #F5A623;  /* accent amber */
   --ad: #D4891A;  /* accent dark */
-  --bg: #F0F7FF;  /* page background */
-  --tx: #1A2B3C;  /* body text */
-  --mu: #5A7A94;  /* muted text */
-  --bd: #D0E4F0;  /* border */
+  --bg: #07192D;  /* page background — deep navy */
+  --tx: #D8EAF5;  /* body text */
+  --mu: #7AAABE;  /* muted text */
+  --bd: #1A3A5C;  /* border */
   --ok: #27AE60;  /* success */
   --wn: #F39C12;  /* warning */
   --er: #E74C3C;  /* error */
   --white: #ffffff;
-  --card-bg: #F8FAFE;
+  --card-bg: #0D2741;  /* card background */
 }
 
 /* ── Reset ────────────────────────────────────────────────── */
@@ -362,12 +362,12 @@ p:last-child { margin-bottom: 0; }
 /* ── Related links grid ───────────────────────────────────── */
 .guide-links { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 16px; }
 .guide-links a {
-  display: block; background: #fff;
+  display: block; background: var(--card-bg);
   border: 1px solid var(--bd); border-radius: 8px;
   padding: 13px; color: var(--tx); font-weight: 700; font-size: 0.85rem;
   transition: border-color 0.15s, background 0.15s;
 }
-.guide-links a:hover { border-color: var(--p); background: var(--card-bg); }
+.guide-links a:hover { border-color: var(--p); background: rgba(42,156,216,.1); }
 @media (max-width: 600px) { .guide-links { grid-template-columns: 1fr; } }
 
 /* ── FAQ accordion ────────────────────────────────────────── */
@@ -376,15 +376,15 @@ p:last-child { margin-bottom: 0; }
   padding: 13px 17px; cursor: pointer;
   display: flex; justify-content: space-between; align-items: center;
   font-weight: 600; font-size: 0.9rem;
-  background: #fff; color: var(--tx);
+  background: var(--card-bg); color: var(--tx);
   border: none; width: 100%; text-align: left;
 }
-.fqq:hover { background: var(--card-bg); }
-.fqa { padding: 0 17px 13px; background: #fff; font-size: 0.86rem; color: var(--mu); line-height: 1.7; }
+.fqq:hover { background: rgba(42,156,216,.1); }
+.fqa { padding: 0 17px 13px; background: var(--card-bg); font-size: 0.86rem; color: var(--mu); line-height: 1.7; }
 
 /* ── Diseases list ────────────────────────────────────────── */
 .disease-card {
-  background: #fff; border: 1px solid var(--bd);
+  background: var(--card-bg); border: 1px solid var(--bd);
   border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
 }
 .disease-card h4 { color: var(--pd); margin-bottom: 8px; }
@@ -474,7 +474,7 @@ p:last-child { margin-bottom: 0; }
   margin: 16px 0 20px;
 }
 .cause-card {
-  background: #fff;
+  background: var(--card-bg);
   border: 1px solid var(--bd);
   border-radius: 10px;
   padding: 14px 16px;
@@ -539,13 +539,13 @@ p:last-child { margin-bottom: 0; }
 }
 .related-health-card {
   display: block;
-  background: #fff;
+  background: var(--card-bg);
   border: 1px solid var(--bd);
   border-radius: 10px;
   padding: 13px 15px;
   text-decoration: none;
   transition: border-color 0.15s, background 0.15s;
 }
-.related-health-card:hover  { border-color: var(--p); background: var(--card-bg); }
+.related-health-card:hover  { border-color: var(--p); background: rgba(42,156,216,.1); }
 .related-health-fish  { font-size: 0.78rem; color: var(--mu); margin-bottom: 2px; }
 .related-health-prob  { font-size: 0.9rem; font-weight: 700; color: var(--tx); }

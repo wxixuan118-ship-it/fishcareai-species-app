@@ -1,37 +1,39 @@
 import type { MetadataRoute } from 'next'
-import { getAllHealthSlugs, getHealthSpeciesList } from '@/lib/fish-health'
+import sql from '@/lib/db'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [slugs, speciesList] = await Promise.all([
-    getAllHealthSlugs(),
-    getHealthSpeciesList(),
+  const [healthRows, speciesRows] = await Promise.all([
+    sql<{ slug: string; updated_at: Date | null }[]>`
+      SELECT slug, updated_at
+      FROM fish_health_content WHERE published = true ORDER BY slug
+    `,
+    sql<{ slug: string; updated_at: Date | null }[]>`
+      SELECT DISTINCT s.slug, s.updated_at
+      FROM fish_health_content fhc
+      JOIN species s ON fhc.fish_id = s.id
+      WHERE fhc.published = true AND s.published = true
+    `,
   ])
 
-  const healthUrls: MetadataRoute.Sitemap = slugs.map((slug) => ({
-    url:             `${SITE_URL}/fish-health/${slug}`,
-    lastModified:    new Date(),
+  const healthUrls: MetadataRoute.Sitemap = healthRows.map((r) => ({
+    url: `${SITE_URL}/fish-health/${r.slug}`,
+    lastModified: r.updated_at ?? new Date(),
     changeFrequency: 'monthly',
-    priority:        0.85,
+    priority: 0.85,
   }))
 
-  const fishListingUrls: MetadataRoute.Sitemap = speciesList.map((s) => ({
-    url:             `${SITE_URL}/fish-health/fish/${s.slug}`,
-    lastModified:    new Date(),
+  const fishListingUrls: MetadataRoute.Sitemap = speciesRows.map((r) => ({
+    url: `${SITE_URL}/fish-health/fish/${r.slug}`,
+    lastModified: r.updated_at ?? new Date(),
     changeFrequency: 'monthly',
-    priority:        0.75,
+    priority: 0.75,
   }))
 
   return [
-    {
-      url:             `${SITE_URL}/fish-health`,
-      lastModified:    new Date(),
-      changeFrequency: 'weekly',
-      priority:        0.7,
-    },
     ...fishListingUrls,
     ...healthUrls,
   ]
