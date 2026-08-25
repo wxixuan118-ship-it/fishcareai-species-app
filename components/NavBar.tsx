@@ -19,7 +19,7 @@ const NAV: NavItem[] = [
   { label: 'Guides',        href: `${SITE_URL}/guides/` },
   { label: 'Tools',         href: `${SITE_URL}/tools/` },
   { label: 'Encyclopedia',  href: `${SITE_URL}/species/`,   activePath: '/species' },
-  { label: 'Fish Diseases', href: `${SITE_URL}/aquarium-fish-diseases/`, activePath: '/fish-health' },
+  { label: 'Fish Health',   href: '/fish-health/', internal: true, activePath: '/fish-health' },
   { label: 'Fish Identify', href: 'https://identify.fishcareai.com/' },
   { label: 'About',         href: `${SITE_URL}/about/` },
   { label: '📱 App',        href: `${SITE_URL}/app/`,       extraClass: 'nl-app-btn' },

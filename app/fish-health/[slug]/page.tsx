@@ -92,7 +92,7 @@ export default async function FishHealthDiagnosisPage(
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',                    item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Aquarium Fish Diseases',  item: `${SITE_URL}/aquarium-fish-diseases/` },
+      { '@type': 'ListItem', position: 2, name: 'Fish Health',             item: `${SITE_URL}/fish-health/` },
       { '@type': 'ListItem', position: 3, name: fishName,                  item: `${SITE_URL}/fish-health/fish/${species.slug}` },
       { '@type': 'ListItem', position: 4, name: `${fishName} ${probName}`, item: canonical },
     ],
@@ -343,7 +343,7 @@ export default async function FishHealthDiagnosisPage(
             </div>
             <div style={{ marginBottom: 16 }}>
               <a
-                href={`${SITE_URL}/aquarium-fish-diseases/`}
+                href="/fish-health/"
                 style={{
                   display: 'block',
                   textAlign: 'center',
@@ -356,7 +356,7 @@ export default async function FishHealthDiagnosisPage(
                   fontWeight: 600,
                 }}
               >
-                🐠 Aquarium Fish Diseases Hub
+                🐠 Fish Health Hub
               </a>
             </div>
 

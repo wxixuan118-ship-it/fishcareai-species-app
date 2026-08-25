@@ -6,7 +6,7 @@ import SpeciesSearch from '@/components/SpeciesSearch'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
 export const metadata: Metadata = {
-  title: 'Fish Health Problem Diagnosis Guide | FishCare AI',
+  title: 'Fish Health | FishCare AI',
   description:
     'Identify and treat common fish health problems. Browse 30+ symptoms by category — behavioral, physical, and disease — with step-by-step diagnosis and treatment guides.',
   alternates: {
@@ -80,7 +80,7 @@ export default async function FishHealthHubPage() {
             <span style={{ color: 'rgba(255,255,255,.85)' }}>Fish Health</span>
           </div>
           <div className="sp-tag">Diagnosis Library</div>
-          <h1>Fish Health Problem Guide</h1>
+          <h1>Fish Health</h1>
           <p className="sci-name" style={{ maxWidth: 560 }}>
             Browse {problems.length} common fish health problems. Each guide includes species-specific
             causes, step-by-step diagnosis, and treatment instructions.

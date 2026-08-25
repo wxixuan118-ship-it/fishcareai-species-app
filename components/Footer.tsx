@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="ftcol">
             <h5>Explore</h5>
             <a href={`${SITE_URL}/species/`}>Fish Species</a>
-            <a href={`${SITE_URL}/aquarium-fish-diseases/`}>Fish Diseases</a>
+            <a href="/fish-health/">Fish Health</a>
             <a href={`${SITE_URL}/guides/`}>Guides</a>
             <a href={`${SITE_URL}/tools/`}>Aquarium Tools</a>
             <a href="https://identify.fishcareai.com/">Fish Identify</a>
