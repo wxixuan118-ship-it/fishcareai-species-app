@@ -8,6 +8,13 @@ export async function getSpeciesBySlug(slug: string): Promise<Species | null> {
   return rows[0] ?? null
 }
 
+export async function hasPublishedGuide(speciesId: Species['id']): Promise<boolean> {
+  const rows = await sql<{ one: number }[]>`
+    SELECT 1 AS one FROM species_guides WHERE species_id = ${speciesId} AND published = true LIMIT 1
+  `
+  return rows.length > 0
+}
+
 export async function getSpeciesGuide(slug: string): Promise<{ species: Species; guide: SpeciesGuide } | null> {
   const species = await getSpeciesBySlug(slug)
   if (!species) return null

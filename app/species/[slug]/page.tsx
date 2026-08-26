@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getSpeciesBySlug } from '@/lib/species'
+import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -73,13 +73,17 @@ export default async function SpeciesEncyclopediaPage(
   const canonical   = `${SITE_URL}/species/${species.slug}`
   const guideUrl    = `/species/${species.slug}/care-guide`
 
+  // The care-guide route 404s unless a published species_guides row exists,
+  // so only link to it when there is one.
+  const hasGuide    = await hasPublishedGuide(species.id)
+
   // Schema.org JSON-LD
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',        item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Encyclopedia', item: `${SITE_URL}/wiki/` },
+      { '@type': 'ListItem', position: 2, name: 'Encyclopedia', item: `${SITE_URL}/species/` },
       { '@type': 'ListItem', position: 3, name: species.common_name, item: canonical },
     ],
   }
@@ -225,17 +229,19 @@ export default async function SpeciesEncyclopediaPage(
               </>
             )}
 
-            {/* CTA */}
-            <div className="cta-box">
-              <h4>📋 Full Care Guide</h4>
-              <p>
-                Ready to set up a tank for your {species.common_name}? The complete care guide covers
-                tank setup, feeding schedule, common diseases, tank mates, and breeding.
-              </p>
-              <a className="btn" href={guideUrl}>
-                Read {species.common_name} Care Guide →
-              </a>
-            </div>
+            {/* CTA — only when a published care guide exists */}
+            {hasGuide && (
+              <div className="cta-box">
+                <h4>📋 Full Care Guide</h4>
+                <p>
+                  Ready to set up a tank for your {species.common_name}? The complete care guide covers
+                  tank setup, feeding schedule, common diseases, tank mates, and breeding.
+                </p>
+                <a className="btn" href={guideUrl}>
+                  Read {species.common_name} Care Guide →
+                </a>
+              </div>
+            )}
 
             {/* Related */}
             <h2 id="related">Related Species</h2>
@@ -243,6 +249,7 @@ export default async function SpeciesEncyclopediaPage(
               currentSlug={species.slug}
               relatedSlugs={species.related_species}
               speciesName={species.common_name}
+              hasGuide={hasGuide}
             />
 
             {/* Editorial note */}

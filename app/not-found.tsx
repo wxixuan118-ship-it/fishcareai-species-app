@@ -8,7 +8,7 @@ export default function NotFound() {
         This species profile is not yet available. Browse the full encyclopedia below.
       </p>
       <a
-        href={`${SITE_URL}/wiki/`}
+        href={`${SITE_URL}/species/`}
         style={{
           display: 'inline-block',
           background: 'var(--p)',

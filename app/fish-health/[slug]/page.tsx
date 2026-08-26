@@ -4,6 +4,7 @@ import {
   getFishHealthPage,
   getRelatedHealthPages,
 } from '@/lib/fish-health'
+import { hasPublishedGuide } from '@/lib/species'
 import HealthHero        from '@/components/HealthHero'
 import UrgencyBanner     from '@/components/UrgencyBanner'
 import CausesGrid        from '@/components/CausesGrid'
@@ -85,6 +86,9 @@ export default async function FishHealthDiagnosisPage(
 
   // Fetch related pages (non-blocking — empty array on failure)
   const relatedLinks = await getRelatedHealthPages(content.related_slugs ?? [])
+
+  // The care-guide route 404s unless a published species_guides row exists.
+  const hasGuide     = await hasPublishedGuide(species.id)
 
   // ── JSON-LD ─────────────────────────────────────────────────────────────────
   const breadcrumbSchema = {
@@ -218,16 +222,18 @@ export default async function FishHealthDiagnosisPage(
             )}
 
             {/* Internal CTAs */}
-            <div className="cta-box">
-              <h4>📖 Full Care Guide</h4>
-              <p>
-                Learn everything about keeping a healthy {fishName} — tank setup, water parameters,
-                diet, tank mates, and disease prevention.
-              </p>
-              <a className="btn" href={`/species/${species.slug}/care-guide`}>
-                {fishName} Care Guide →
-              </a>
-            </div>
+            {hasGuide && (
+              <div className="cta-box">
+                <h4>📖 Full Care Guide</h4>
+                <p>
+                  Learn everything about keeping a healthy {fishName} — tank setup, water parameters,
+                  diet, tank mates, and disease prevention.
+                </p>
+                <a className="btn" href={`/species/${species.slug}/care-guide`}>
+                  {fishName} Care Guide →
+                </a>
+              </div>
+            )}
 
             <div className="cta-box" style={{ background: 'linear-gradient(135deg, #0F3D5E, #2E9E7D)', marginTop: 0 }}>
               <h4>🔬 AI Symptom Checker</h4>

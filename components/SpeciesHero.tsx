@@ -46,7 +46,7 @@ export default function SpeciesHero({ species }: Props) {
         <div className="breadcrumb">
           <a href={SITE_URL}>Home</a>
           <span>/</span>
-          <a href={`${SITE_URL}/wiki/`}>Encyclopedia</a>
+          <a href={`${SITE_URL}/species/`}>Encyclopedia</a>
           <span>/</span>
           <span style={{ color: 'rgba(255,255,255,.85)' }}>{species.common_name}</span>
         </div>
