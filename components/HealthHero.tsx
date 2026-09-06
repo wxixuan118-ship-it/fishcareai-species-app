@@ -62,7 +62,7 @@ export default function HealthHero({
           {URGENCY_LABEL[urgency]} · {category}
         </div>
 
-        <h1>Why Is My {fishName} {problemName}?</h1>
+        <h1>{problemName} in {fishName}? Causes &amp; Fast Fixes</h1>
         <div className="sci-name">{scientificName}</div>
 
         <div className="sp-meta-row">
