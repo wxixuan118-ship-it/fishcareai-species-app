@@ -4,6 +4,10 @@ import {
   getFishHealthPage,
   getRelatedHealthPages,
 } from '@/lib/fish-health'
+import {
+  buildFishHealthDescription,
+  buildFishHealthTitle,
+} from '@/lib/fish-health-meta'
 import { hasPublishedGuide } from '@/lib/species'
 import HealthHero        from '@/components/HealthHero'
 import UrgencyBanner     from '@/components/UrgencyBanner'
@@ -42,13 +46,16 @@ export async function generateMetadata(
   const probName    = problem.problem_name
   const canonical   = `${SITE_URL}/fish-health/${content.slug}`
 
-  const title = content.meta_title
-    ?? `Why Is My ${fishName} ${probName}? Causes & Solutions`
-  const description = content.meta_description
-    ?? `Learn why your ${fishName} is ${probName.toLowerCase()}. Discover common causes, step-by-step diagnosis, and how to treat ${species.scientific_name} at home.`
+  const title = buildFishHealthTitle(probName, fishName)
+  const description = buildFishHealthDescription({
+    fishName,
+    problemName: probName,
+    causes: content.common_causes,
+    treatmentStepCount: content.treatment_steps?.length,
+  })
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical },
     openGraph: {
@@ -83,6 +90,13 @@ export default async function FishHealthDiagnosisPage(
   const canonical = `${SITE_URL}/fish-health/${content.slug}`
   const fishName  = species.common_name
   const probName  = problem.problem_name
+  const title = buildFishHealthTitle(probName, fishName)
+  const description = buildFishHealthDescription({
+    fishName,
+    problemName: probName,
+    causes: content.common_causes,
+    treatmentStepCount: content.treatment_steps?.length,
+  })
 
   // Fetch related pages (non-blocking — empty array on failure)
   const relatedLinks = await getRelatedHealthPages(content.related_slugs ?? [])
@@ -111,7 +125,7 @@ export default async function FishHealthDiagnosisPage(
     '@context': 'https://schema.org',
     '@type': 'HowTo',
     name: `How to diagnose and treat ${fishName} ${probName.toLowerCase()}`,
-    description: content.meta_description ?? '',
+    description,
     step: allSteps.map((s) => ({
       '@type': 'HowToStep',
       name: s.action,
@@ -132,8 +146,8 @@ export default async function FishHealthDiagnosisPage(
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: `Why Is My ${fishName} ${probName}?`,
-    description: content.meta_description ?? '',
+    headline: title,
+    description,
     url: canonical,
     image: `${SITE_URL}/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`,
     datePublished: content.created_at,
