@@ -10,6 +10,7 @@ type FishHealthMetaInput = {
 }
 
 const MAX_DESCRIPTION_LENGTH = 160
+const MAX_TITLE_LENGTH = 60
 
 function clean(value: string): string {
   return value.replace(/\s+/g, ' ').trim()
@@ -23,8 +24,22 @@ function clipAtWord(value: string, maxLength: number): string {
   return (lastSpace > 0 ? clipped.slice(0, lastSpace) : clipped).replace(/[,:;.-]+$/, '')
 }
 
+/**
+ * The natural question reads best, but long species and problem names push it
+ * past the SERP limit, so fall back to progressively tighter phrasings that
+ * still lead with the terms people search.
+ */
 export function buildFishHealthTitle(problemName: string, fishName: string): string {
-  return `${clean(problemName)} in ${clean(fishName)}? Causes & Fast Fixes`
+  const problem = clean(problemName)
+  const fish = clean(fishName)
+  const variants = [
+    `${problem} in ${fish}? Causes & Fast Fixes`,
+    `${fish} ${problem}: Causes & Fast Fixes`,
+    `${fish} ${problem}: Causes & Fixes`,
+    `${fish} ${problem}`,
+  ]
+
+  return variants.find((variant) => variant.length <= MAX_TITLE_LENGTH) ?? variants[variants.length - 1]
 }
 
 export function buildFishHealthDescription({

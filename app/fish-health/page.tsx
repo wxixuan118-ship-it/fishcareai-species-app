@@ -6,7 +6,7 @@ import SpeciesSearch from '@/components/SpeciesSearch'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
 export const metadata: Metadata = {
-  title: 'Fish Health | FishCare AI',
+  title: 'Fish Health',
   description:
     'Identify and treat common fish health problems. Browse 30+ symptoms by category — behavioral, physical, and disease — with step-by-step diagnosis and treatment guides.',
   alternates: {

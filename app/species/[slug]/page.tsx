@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
+import { resolveSpeciesTitle } from '@/lib/species-meta'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -32,12 +33,12 @@ export async function generateMetadata(
   const species = await getSpeciesBySlug(params.slug)
   if (!species) return { title: 'Species Not Found' }
 
-  const title       = species.meta_title       ?? `${species.common_name} (${species.scientific_name}) — Species Profile | FishCare AI`
+  const title       = resolveSpeciesTitle(species.meta_title, species.common_name, species.scientific_name)
   const description = species.meta_description ?? `Full ${species.common_name} species profile: classification, natural habitat, water requirements, behavior, and care overview for ${species.scientific_name}.`
   const canonical   = `${SITE_URL}/species/${species.slug}`
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical },
     openGraph: {
@@ -124,7 +125,7 @@ export default async function SpeciesEncyclopediaPage(
           <article className="artc" id="article">
 
             {/* Overview */}
-            <h2 id="overview">Overview</h2>
+            <h2 id="overview">{species.common_name} Overview</h2>
             <p>{species.sections.overview}</p>
 
             <CalloutBox>
@@ -135,7 +136,7 @@ export default async function SpeciesEncyclopediaPage(
             </CalloutBox>
 
             {/* Classification */}
-            <h2 id="classification">Scientific Classification</h2>
+            <h2 id="classification">{species.common_name} Scientific Classification</h2>
             <table className="ptbl">
               <thead>
                 <tr>
@@ -164,11 +165,11 @@ export default async function SpeciesEncyclopediaPage(
             </table>
 
             {/* Habitat */}
-            <h2 id="habitat">Natural Habitat</h2>
+            <h2 id="habitat">{species.common_name} Natural Habitat</h2>
             <p>{species.sections.habitat}</p>
 
             {/* Appearance */}
-            <h2 id="appearance">Appearance</h2>
+            <h2 id="appearance">{species.common_name} Appearance &amp; Size</h2>
             <p>{species.sections.appearance}</p>
             {species.physical?.color && (
               <CalloutBox>
@@ -177,7 +178,7 @@ export default async function SpeciesEncyclopediaPage(
             )}
 
             {/* Behavior */}
-            <h2 id="behavior">Behavior</h2>
+            <h2 id="behavior">{species.common_name} Behavior &amp; Temperament</h2>
             <p>{species.sections.behavior_detail}</p>
             {species.behavior && (
               <table className="ptbl">
@@ -211,7 +212,7 @@ export default async function SpeciesEncyclopediaPage(
             )}
 
             {/* Water requirements */}
-            <h2 id="water">Water Requirements</h2>
+            <h2 id="water">{species.common_name} Water Requirements</h2>
             {species.environment && <WaterParamsTable env={species.environment} />}
             <CalloutBox variant="warn">
               <strong>Important:</strong> Always dechlorinate tap water before adding it to the tank. Chlorine and chloramines damage a fish&apos;s gills and reduce life expectancy.
@@ -220,7 +221,7 @@ export default async function SpeciesEncyclopediaPage(
             {/* Interesting facts */}
             {species.sections.interesting_facts?.length > 0 && (
               <>
-                <h2 id="facts">Interesting Facts</h2>
+                <h2 id="facts">Interesting Facts About {species.common_name}</h2>
                 <ul>
                   {species.sections.interesting_facts.map((fact, i) => (
                     <li key={i}>{fact}</li>
@@ -244,7 +245,7 @@ export default async function SpeciesEncyclopediaPage(
             )}
 
             {/* Related */}
-            <h2 id="related">Related Species</h2>
+            <h2 id="related">Species Related to {species.common_name}</h2>
             <RelatedSpeciesLinks
               currentSlug={species.slug}
               relatedSlugs={species.related_species}

@@ -21,7 +21,7 @@ export async function generateMetadata(
   `
   if (!species) return { title: 'Fish Not Found' }
   return {
-    title: `${species.common_name} Health Problems & Symptoms | FishCare AI`,
+    title: `${species.common_name} Health Problems & Symptoms`,
     description: `Browse all common health problems and symptoms for ${species.common_name} (${species.scientific_name}). Step-by-step diagnosis and treatment guides.`,
     alternates: { canonical: `${SITE_URL}/fish-health/fish/${params.slug}` },
   }

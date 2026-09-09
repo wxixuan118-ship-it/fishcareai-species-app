@@ -3,7 +3,7 @@ import SpeciesGrid from '@/components/SpeciesGrid'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Aquarium Fish Encyclopedia A–Z | FishCareAI',
+  title: 'Aquarium Fish Encyclopedia A–Z',
   description: 'Browse 48+ freshwater and saltwater fish species profiles. Filter A–Z, find water parameters, tank size, diet, and care difficulty for every species.',
 }
 

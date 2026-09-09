@@ -201,7 +201,7 @@ export default async function FishHealthDiagnosisPage(
             {/* How to Diagnose */}
             {content.diagnosis_steps?.length > 0 && (
               <>
-                <h2 id="diagnose">How to Diagnose</h2>
+                <h2 id="diagnose">How to Diagnose {probName} in {fishName}</h2>
                 <p>Follow these steps in order. Stop when you identify a likely cause and move to treatment.</p>
                 <NumberedSteps steps={content.diagnosis_steps} />
               </>
@@ -210,7 +210,7 @@ export default async function FishHealthDiagnosisPage(
             {/* How to Fix */}
             {content.treatment_steps?.length > 0 && (
               <>
-                <h2 id="fix">How to Fix It</h2>
+                <h2 id="fix">How to Treat {probName} in {fishName}</h2>
                 <NumberedSteps steps={content.treatment_steps} />
               </>
             )}
@@ -218,7 +218,7 @@ export default async function FishHealthDiagnosisPage(
             {/* Prevention */}
             {content.prevention && (
               <>
-                <h2 id="prevention">Prevention</h2>
+                <h2 id="prevention">Preventing {probName} in {fishName}</h2>
                 <CalloutBox variant="ok">
                   {content.prevention}
                 </CalloutBox>
@@ -228,7 +228,7 @@ export default async function FishHealthDiagnosisPage(
             {/* When to seek help */}
             {content.when_to_seek_help && (
               <>
-                <h2 id="seek-help">When to Seek Expert Help</h2>
+                <h2 id="seek-help">When {fishName} {probName} Needs Expert Help</h2>
                 <CalloutBox variant="warn">
                   <strong>See a vet if:</strong> {content.when_to_seek_help}
                 </CalloutBox>
@@ -263,7 +263,7 @@ export default async function FishHealthDiagnosisPage(
             {/* Related problems */}
             {relatedLinks.length > 0 && (
               <>
-                <h2 id="related">Related Problems</h2>
+                <h2 id="related">Related {fishName} Problems</h2>
                 <RelatedHealthLinks links={relatedLinks} />
               </>
             )}

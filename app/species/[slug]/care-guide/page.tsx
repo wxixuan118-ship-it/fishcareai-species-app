@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getSpeciesGuide } from '@/lib/species'
+import { stripBrand } from '@/lib/species-meta'
 import GuideHero from '@/components/GuideHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -65,7 +66,7 @@ export async function generateMetadata(
 
   const { species, guide } = result
   const override    = META_OVERRIDES[params.slug]
-  const title       = override?.title       ?? guide.meta_title       ?? species.meta_title       ?? `${species.common_name} Care Guide: Tank Setup, Feeding & Disease | FishCare AI`
+  const title       = stripBrand(override?.title ?? guide.meta_title ?? species.meta_title ?? `${species.common_name} Care Guide: Tank Setup, Feeding & Disease`)
   const description = override?.description ?? guide.meta_description ?? species.meta_description ?? `Complete ${species.common_name} care guide covering tank setup, water parameters, feeding schedule, tank mates, common diseases, and breeding for ${species.scientific_name}.`
   const canonical   = `${SITE_URL}/species/${species.slug}/care-guide`
 
