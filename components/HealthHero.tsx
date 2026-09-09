@@ -43,10 +43,6 @@ export default function HealthHero({
         }}
         width={1280}
         height={340}
-        /* Above the fold and almost always the LCP element — tell the browser
-           to fetch it ahead of the rest rather than at default priority. */
-        fetchPriority="high"
-        decoding="async"
       />
       <div className="sp-hero-overlay" />
       <div className="sp-hero-inner">

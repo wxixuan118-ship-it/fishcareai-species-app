@@ -1,4 +1,3 @@
-import { cache } from 'react'
 import sql from './db'
 import type {
   FishHealthPage,
@@ -8,33 +7,29 @@ import type {
   HealthPageSummary,
 } from '@/types/fish-health'
 
-// Both generateMetadata() and the page component need this row for the same
-// slug on every request. Without cache() that is two identical trips to the DB
-// per page view; React dedupes them to one for the life of the render.
-export const getFishHealthPage = cache(async (slug: string): Promise<FishHealthPage | null> => {
+export async function getFishHealthPage(slug: string): Promise<FishHealthPage | null> {
   const [content] = await sql`
     SELECT * FROM fish_health_content WHERE slug = ${slug} AND published = true LIMIT 1
   `
   if (!content) return null
 
-  // Both rows key off `content` but not off each other, so fetch them together.
-  const [[species], [problem]] = await Promise.all([
-    sql`
-      SELECT id, slug, common_name, scientific_name, family, water_type, difficulty_level, environment
-      FROM species WHERE id = ${content.fish_id} LIMIT 1
-    `,
-    sql`
-      SELECT * FROM health_problems WHERE id = ${content.problem_id} LIMIT 1
-    `,
-  ])
-  if (!species || !problem) return null
+  const [species] = await sql`
+    SELECT id, slug, common_name, scientific_name, family, water_type, difficulty_level, environment
+    FROM species WHERE id = ${content.fish_id} LIMIT 1
+  `
+  if (!species) return null
+
+  const [problem] = await sql`
+    SELECT * FROM health_problems WHERE id = ${content.problem_id} LIMIT 1
+  `
+  if (!problem) return null
 
   return {
     content: content as FishHealthContent,
     species: species as SpeciesBrief,
     problem: problem as HealthProblem,
   }
-})
+}
 
 export async function getAllHealthSlugs(): Promise<string[]> {
   const rows = await sql<{ slug: string }[]>`
