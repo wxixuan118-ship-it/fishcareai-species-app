@@ -24,15 +24,24 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com
 // pages must render per-request rather than being statically generated.
 export const dynamic = 'force-dynamic'
 
-const TOC_ITEMS = [
-  { id: 'causes',       label: 'Common Causes' },
-  { id: 'diagnose',     label: 'How to Diagnose' },
-  { id: 'fix',          label: 'How to Fix' },
-  { id: 'prevention',   label: 'Prevention' },
-  { id: 'seek-help',    label: 'When to Seek Help' },
-  { id: 'related',      label: 'Related Problems' },
-  { id: 'faq',          label: 'FAQ' },
-]
+// Each section below renders only when its content exists, so the TOC is built
+// from the same conditions — a link to a section that never rendered is a dead
+// anchor for both readers and crawlers.
+const TOC_LABELS: Record<string, string> = {
+  causes:     'Common Causes',
+  diagnose:   'How to Diagnose',
+  fix:        'How to Fix',
+  prevention: 'Prevention',
+  'seek-help': 'When to Seek Help',
+  related:    'Related Problems',
+  faq:        'FAQ',
+}
+
+function buildTocItems(present: Record<string, boolean>) {
+  return Object.entries(TOC_LABELS)
+    .filter(([id]) => present[id])
+    .map(([id, label]) => ({ id, label }))
+}
 
 // ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata(
@@ -98,11 +107,24 @@ export default async function FishHealthDiagnosisPage(
     treatmentStepCount: content.treatment_steps?.length,
   })
 
-  // Fetch related pages (non-blocking — empty array on failure)
-  const relatedLinks = await getRelatedHealthPages(content.related_slugs ?? [])
+  // Both lookups are independent of each other — run them concurrently rather
+  // than paying two round trips in series.
+  const [relatedLinks, hasGuide] = await Promise.all([
+    // Related pages (non-blocking — empty array on failure)
+    getRelatedHealthPages(content.related_slugs ?? []),
+    // The care-guide route 404s unless a published species_guides row exists.
+    hasPublishedGuide(species.id),
+  ])
 
-  // The care-guide route 404s unless a published species_guides row exists.
-  const hasGuide     = await hasPublishedGuide(species.id)
+  const tocItems = buildTocItems({
+    causes:      (content.common_causes?.length ?? 0) > 0,
+    diagnose:    (content.diagnosis_steps?.length ?? 0) > 0,
+    fix:         (content.treatment_steps?.length ?? 0) > 0,
+    prevention:  Boolean(content.prevention),
+    'seek-help': Boolean(content.when_to_seek_help),
+    related:     relatedLinks.length > 0,
+    faq:         (content.faq?.length ?? 0) > 0,
+  })
 
   // ── JSON-LD ─────────────────────────────────────────────────────────────────
   const breadcrumbSchema = {
@@ -287,6 +309,24 @@ export default async function FishHealthDiagnosisPage(
                   most common root cause. Consult an aquatic veterinarian if symptoms persist after
                   48 hours of correct treatment.
                 </p>
+                <p style={{ fontSize: '0.82rem', marginTop: 8 }}>
+                  <strong>Sources:</strong>{' '}
+                  <a
+                    href="https://www.merckvetmanual.com/exotic-and-laboratory-animals/aquarium-fishes"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Merck Veterinary Manual — Aquarium Fishes
+                  </a>
+                  {' · '}
+                  <a
+                    href="https://edis.ifas.ufl.edu/publication/FA099"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    UF/IFAS Extension — Fish Health Management
+                  </a>
+                </p>
               </div>
             </div>
 
@@ -380,7 +420,7 @@ export default async function FishHealthDiagnosisPage(
               </a>
             </div>
 
-            <TableOfContents items={TOC_ITEMS} />
+            <TableOfContents items={tocItems} />
           </aside>
         </div>
       </div>
