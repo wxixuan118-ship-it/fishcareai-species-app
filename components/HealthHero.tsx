@@ -9,6 +9,8 @@ interface Props {
   fishSlug:       string
   scientificName: string
   problemName:    string
+  /** "Neon Tetra Hiding Constantly" — the phrase the title, H1 and headings share */
+  subject:        string
   urgency:        Urgency
   category:       string
 }
@@ -24,6 +26,7 @@ export default function HealthHero({
   fishSlug,
   scientificName,
   problemName,
+  subject,
   urgency,
   category,
 }: Props) {
@@ -36,7 +39,7 @@ export default function HealthHero({
       <img
         className="sp-hero-img"
         src={imgSrc}
-        alt={`${fishName} — ${problemName}`}
+        alt={`${subject} — ${fishName} showing signs of ${problemName.toLowerCase()}`}
         onError={(e) => {
           const img = e.currentTarget
           if (img.src !== fallbackSrc) img.src = fallbackSrc
@@ -62,7 +65,7 @@ export default function HealthHero({
           {URGENCY_LABEL[urgency]} · {category}
         </div>
 
-        <h1>{problemName} in {fishName}? Causes &amp; Fast Fixes</h1>
+        <h1>{subject}? Causes &amp; Fast Fixes</h1>
         <div className="sci-name">{scientificName}</div>
 
         <div className="sp-meta-row">

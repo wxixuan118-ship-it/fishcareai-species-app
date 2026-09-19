@@ -18,7 +18,7 @@ export default function CausesGrid({ causes }: Props) {
       {causes.map((cause, i) => (
         <div key={i} className="cause-card">
           <div className="cause-card-top">
-            <h4>{cause.title}</h4>
+            <h3>{cause.title}</h3>
             <span className={`likelihood-badge likelihood-${cause.likelihood}`}>
               {LIKELIHOOD_LABEL[cause.likelihood]}
             </span>

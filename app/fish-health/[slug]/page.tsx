@@ -7,6 +7,8 @@ import {
 import {
   buildFishHealthDescription,
   buildFishHealthTitle,
+  buildSearchPhrase,
+  buildSubject,
 } from '@/lib/fish-health-meta'
 import { hasPublishedGuide } from '@/lib/species'
 import HealthHero        from '@/components/HealthHero'
@@ -24,15 +26,24 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com
 // pages must render per-request rather than being statically generated.
 export const dynamic = 'force-dynamic'
 
-const TOC_ITEMS = [
-  { id: 'causes',       label: 'Common Causes' },
-  { id: 'diagnose',     label: 'How to Diagnose' },
-  { id: 'fix',          label: 'How to Fix' },
-  { id: 'prevention',   label: 'Prevention' },
-  { id: 'seek-help',    label: 'When to Seek Help' },
-  { id: 'related',      label: 'Related Problems' },
-  { id: 'faq',          label: 'FAQ' },
-]
+// Each section below renders only when its content exists, so the TOC is built
+// from the same conditions — a link to a section that never rendered is a dead
+// anchor for both readers and crawlers.
+const TOC_LABELS: Record<string, string> = {
+  causes:      'Common Causes',
+  diagnose:    'How to Diagnose',
+  fix:         'How to Fix',
+  prevention:  'Prevention',
+  'seek-help': 'When to Seek Help',
+  related:     'Related Problems',
+  faq:         'FAQ',
+}
+
+function buildTocItems(present: Record<string, boolean>) {
+  return Object.entries(TOC_LABELS)
+    .filter(([id]) => present[id])
+    .map(([id, label]) => ({ id, label }))
+}
 
 // ── Dynamic metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata(
@@ -46,10 +57,10 @@ export async function generateMetadata(
   const probName    = problem.problem_name
   const canonical   = `${SITE_URL}/fish-health/${content.slug}`
 
-  const title = buildFishHealthTitle(probName, fishName)
+  const subject = buildSubject(fishName, problem.slug, probName)
+  const title = buildFishHealthTitle(subject, buildSearchPhrase(fishName, problem.slug))
   const description = buildFishHealthDescription({
-    fishName,
-    problemName: probName,
+    subject,
     causes: content.common_causes,
     treatmentStepCount: content.treatment_steps?.length,
   })
@@ -68,7 +79,7 @@ export async function generateMetadata(
         url: `${SITE_URL}/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`,
         width: 1280,
         height: 640,
-        alt: `${fishName} — ${probName}`,
+        alt: subject,
       }],
     },
     twitter: {
@@ -90,10 +101,10 @@ export default async function FishHealthDiagnosisPage(
   const canonical = `${SITE_URL}/fish-health/${content.slug}`
   const fishName  = species.common_name
   const probName  = problem.problem_name
-  const title = buildFishHealthTitle(probName, fishName)
+  const subject   = buildSubject(fishName, problem.slug, probName)
+  const title = buildFishHealthTitle(subject, buildSearchPhrase(fishName, problem.slug))
   const description = buildFishHealthDescription({
-    fishName,
-    problemName: probName,
+    subject,
     causes: content.common_causes,
     treatmentStepCount: content.treatment_steps?.length,
   })
@@ -104,6 +115,16 @@ export default async function FishHealthDiagnosisPage(
   // The care-guide route 404s unless a published species_guides row exists.
   const hasGuide     = await hasPublishedGuide(species.id)
 
+  const tocItems = buildTocItems({
+    causes:      (content.common_causes?.length ?? 0) > 0,
+    diagnose:    (content.diagnosis_steps?.length ?? 0) > 0,
+    fix:         (content.treatment_steps?.length ?? 0) > 0,
+    prevention:  Boolean(content.prevention),
+    'seek-help': Boolean(content.when_to_seek_help),
+    related:     relatedLinks.length > 0,
+    faq:         (content.faq?.length ?? 0) > 0,
+  })
+
   // ── JSON-LD ─────────────────────────────────────────────────────────────────
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -112,7 +133,7 @@ export default async function FishHealthDiagnosisPage(
       { '@type': 'ListItem', position: 1, name: 'Home',                    item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Fish Health',             item: `${SITE_URL}/fish-health/` },
       { '@type': 'ListItem', position: 3, name: fishName,                  item: `${SITE_URL}/fish-health/fish/${species.slug}` },
-      { '@type': 'ListItem', position: 4, name: `${fishName} ${probName}`, item: canonical },
+      { '@type': 'ListItem', position: 4, name: subject, item: canonical },
     ],
   }
 
@@ -124,7 +145,7 @@ export default async function FishHealthDiagnosisPage(
   const howToSchema = allSteps.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: `How to diagnose and treat ${fishName} ${probName.toLowerCase()}`,
+    name: `How to diagnose and treat ${subject.toLowerCase()}`,
     description,
     step: allSteps.map((s) => ({
       '@type': 'HowToStep',
@@ -174,6 +195,7 @@ export default async function FishHealthDiagnosisPage(
         fishSlug={species.slug}
         scientificName={species.scientific_name}
         problemName={probName}
+        subject={subject}
         urgency={problem.urgency}
         category={problem.category}
       />
@@ -193,7 +215,7 @@ export default async function FishHealthDiagnosisPage(
             {/* Common Causes */}
             {content.common_causes?.length > 0 && (
               <>
-                <h2 id="causes">Common Causes of {probName} in {fishName}</h2>
+                <h2 id="causes">{subject}: Common Causes</h2>
                 <CausesGrid causes={content.common_causes} />
               </>
             )}
@@ -201,7 +223,7 @@ export default async function FishHealthDiagnosisPage(
             {/* How to Diagnose */}
             {content.diagnosis_steps?.length > 0 && (
               <>
-                <h2 id="diagnose">How to Diagnose {probName} in {fishName}</h2>
+                <h2 id="diagnose">How to Diagnose the Cause</h2>
                 <p>Follow these steps in order. Stop when you identify a likely cause and move to treatment.</p>
                 <NumberedSteps steps={content.diagnosis_steps} />
               </>
@@ -210,7 +232,7 @@ export default async function FishHealthDiagnosisPage(
             {/* How to Fix */}
             {content.treatment_steps?.length > 0 && (
               <>
-                <h2 id="fix">How to Treat {probName} in {fishName}</h2>
+                <h2 id="fix">How to Treat {subject}</h2>
                 <NumberedSteps steps={content.treatment_steps} />
               </>
             )}
@@ -218,7 +240,7 @@ export default async function FishHealthDiagnosisPage(
             {/* Prevention */}
             {content.prevention && (
               <>
-                <h2 id="prevention">Preventing {probName} in {fishName}</h2>
+                <h2 id="prevention">How to Prevent {subject}</h2>
                 <CalloutBox variant="ok">
                   {content.prevention}
                 </CalloutBox>
@@ -228,7 +250,7 @@ export default async function FishHealthDiagnosisPage(
             {/* When to seek help */}
             {content.when_to_seek_help && (
               <>
-                <h2 id="seek-help">When {fishName} {probName} Needs Expert Help</h2>
+                <h2 id="seek-help">When to See a Vet</h2>
                 <CalloutBox variant="warn">
                   <strong>See a vet if:</strong> {content.when_to_seek_help}
                 </CalloutBox>
@@ -238,7 +260,7 @@ export default async function FishHealthDiagnosisPage(
             {/* Internal CTAs */}
             {hasGuide && (
               <div className="cta-box">
-                <h4>📖 Full Care Guide</h4>
+                <h3>📖 Full Care Guide</h3>
                 <p>
                   Learn everything about keeping a healthy {fishName} — tank setup, water parameters,
                   diet, tank mates, and disease prevention.
@@ -250,7 +272,7 @@ export default async function FishHealthDiagnosisPage(
             )}
 
             <div className="cta-box" style={{ background: 'linear-gradient(135deg, #0F3D5E, #2E9E7D)', marginTop: 0 }}>
-              <h4>🔬 AI Symptom Checker</h4>
+              <h3>🔬 AI Symptom Checker</h3>
               <p>
                 Not sure what&apos;s wrong? Describe your fish&apos;s symptoms to the FishCare AI
                 and get an instant diagnosis.
@@ -286,6 +308,24 @@ export default async function FishHealthDiagnosisPage(
                   Always test water parameters before treating a sick fish — poor water quality is the
                   most common root cause. Consult an aquatic veterinarian if symptoms persist after
                   48 hours of correct treatment.
+                </p>
+                <p style={{ fontSize: '0.82rem', marginTop: 8 }}>
+                  <strong>Sources:</strong>{' '}
+                  <a
+                    href="https://www.merckvetmanual.com/exotic-and-laboratory-animals/aquarium-fishes"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Merck Veterinary Manual — Aquarium Fishes
+                  </a>
+                  {' · '}
+                  <a
+                    href="https://edis.ifas.ufl.edu/publication/FA099"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    UF/IFAS Extension — Fish Health Management
+                  </a>
                 </p>
               </div>
             </div>
@@ -380,7 +420,7 @@ export default async function FishHealthDiagnosisPage(
               </a>
             </div>
 
-            <TableOfContents items={TOC_ITEMS} />
+            <TableOfContents items={tocItems} />
           </aside>
         </div>
       </div>

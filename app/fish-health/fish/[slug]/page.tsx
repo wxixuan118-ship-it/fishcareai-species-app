@@ -82,6 +82,14 @@ export default async function FishHealthListPage(
           </a>
         </div>
 
+        <h2 style={{ marginBottom: 10 }}>All {species.common_name} Health Problems</h2>
+        <p style={{ marginBottom: 20, maxWidth: 760 }}>
+          {pages.length} {species.common_name} health problems, each with the most likely causes, a
+          step-by-step diagnosis, treatment steps and prevention advice. Start with the symptom you
+          can see — colour, fins, breathing, appetite or behaviour — and check water parameters
+          first, because poor water quality sits behind most {species.common_name} health problems.
+        </p>
+
         <div className="guide-links" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
           {pages.map((p) => {
             const badge = URGENCY_BADGE[p.urgency] ?? URGENCY_BADGE.monitor
@@ -109,7 +117,7 @@ export default async function FishHealthListPage(
         </div>
 
         <div className="cta-box" style={{ marginTop: 48 }}>
-          <h4>Browse All Fish Health Guides</h4>
+          <h3>Browse All Fish Health Guides</h3>
           <p>See all 30 fish health problem categories with diagnosis and treatment guides for hundreds of species.</p>
           <a className="btn" href="/fish-health/">Fish Health Hub →</a>
         </div>

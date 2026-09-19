@@ -10,7 +10,7 @@ interface Props {
 export default function TableOfContents({ items }: Props) {
   return (
     <div className="toc-card">
-      <h4>Contents</h4>
+      <div className="toc-title">Contents</div>
       {items.map((item) => (
         <a key={item.id} href={`#${item.id}`}>
           {item.label}

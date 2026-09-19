@@ -273,7 +273,7 @@ p:last-child { margin-bottom: 0; }
   position: sticky;
   top: 80px;
 }
-.toc-card h4 {
+.toc-card .toc-title {
   color: rgba(234,251,255,.8); margin-bottom: 10px;
   font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
 }
@@ -339,7 +339,7 @@ p:last-child { margin-bottom: 0; }
   border-radius: 14px; padding: 22px 22px 20px;
   color: #fff; margin: 28px 0;
 }
-.cta-box h4 { color: #fff; margin-bottom: 7px; }
+.cta-box h3, .cta-box h4 { color: #fff; margin-bottom: 7px; font-size: 0.97rem; }
 .cta-box p  { color: rgba(255,255,255,.82); font-size: 0.86rem; margin-bottom: 14px; }
 .cta-box .btn {
   background: #fff; color: var(--p);
@@ -486,7 +486,7 @@ p:last-child { margin-bottom: 0; }
   gap: 8px;
   margin-bottom: 6px;
 }
-.cause-card h4 { font-size: 0.9rem; color: var(--tx); margin: 0; }
+.cause-card h3 { font-size: 0.9rem; color: var(--tx); margin: 0; }
 .cause-card p  { font-size: 0.84rem; margin: 0; }
 .likelihood-badge {
   display: inline-block;
