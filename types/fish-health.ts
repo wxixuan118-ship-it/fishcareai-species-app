@@ -87,4 +87,5 @@ export interface HealthPageSummary {
   fish_name:    string
   problem_name: string
   urgency:      Urgency
+  category?:    ProblemCategory
 }

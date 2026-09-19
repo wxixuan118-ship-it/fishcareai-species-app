@@ -66,7 +66,8 @@ export async function getHealthPagesByFish(fishSlug: string): Promise<HealthPage
       fhc.slug,
       s.common_name AS fish_name,
       hp.problem_name,
-      hp.urgency
+      hp.urgency,
+      hp.category
     FROM fish_health_content fhc
     JOIN species s ON fhc.fish_id = s.id
     JOIN health_problems hp ON fhc.problem_id = hp.id
@@ -78,6 +79,7 @@ export async function getHealthPagesByFish(fishSlug: string): Promise<HealthPage
     fish_name:    r.fish_name as string,
     problem_name: r.problem_name as string,
     urgency:      r.urgency as 'monitor' | 'urgent' | 'emergency',
+    category:     r.category as 'behavioral' | 'physical' | 'disease',
   }))
 }
 
