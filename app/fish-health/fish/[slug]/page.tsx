@@ -3,9 +3,13 @@ import type { Metadata } from 'next'
 import { getHealthPagesByFish } from '@/lib/fish-health'
 import sql from '@/lib/db'
 
-// Rendered on first request, then served from the ISR cache (see ../[slug]/page.tsx).
+// Rendered on first request, then served from the ISR cache (see ../../[slug]/page.tsx
+// for why generateStaticParams must exist and return nothing).
 export const revalidate = 3600
 export const dynamicParams = true
+export function generateStaticParams(): { slug: string }[] {
+  return []
+}
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
