@@ -3,7 +3,9 @@ import type { Metadata } from 'next'
 import { getHealthPagesByFish } from '@/lib/fish-health'
 import sql from '@/lib/db'
 
-export const dynamic = 'force-dynamic'
+// Rendered on first request, then served from the ISR cache (see ../[slug]/page.tsx).
+export const revalidate = 3600
+export const dynamicParams = true
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 

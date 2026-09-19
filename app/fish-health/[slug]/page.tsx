@@ -22,9 +22,12 @@ import TableOfContents   from '@/components/TableOfContents'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
-// The DB isn't reachable during the platform's Docker build step, so these
-// pages must render per-request rather than being statically generated.
-export const dynamic = 'force-dynamic'
+// The DB isn't reachable during the platform's Docker build step, so nothing
+// is prerendered at build time (no generateStaticParams). Each page renders on
+// its first request and is then served from the ISR cache for an hour — the
+// audit measured 1.3–1.7 s TTFB with every request hitting the DB.
+export const revalidate = 3600
+export const dynamicParams = true
 
 // Each section below renders only when its content exists, so the TOC is built
 // from the same conditions — a link to a section that never rendered is a dead
