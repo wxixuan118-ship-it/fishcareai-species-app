@@ -64,9 +64,16 @@ export async function generateMetadata(
     SELECT common_name, scientific_name FROM species WHERE slug = ${params.slug} LIMIT 1
   `
   if (!species) return { title: 'Fish Not Found' }
+  // Long species names push the description past the 160-character SERP
+  // limit; drop the scientific name before anything else.
+  const tail = 'grouped by behavior, physical symptoms and disease — causes, diagnosis and treatment for each.'
+  const withSci = `All the common ${species.common_name} health problems (${species.scientific_name}) ${tail}`
+  const description = withSci.length <= 160
+    ? withSci
+    : `All the common ${species.common_name} health problems ${tail}`
   return {
     title: `${species.common_name} Health Problems & Symptoms`,
-    description: `All the common ${species.common_name} health problems (${species.scientific_name}) grouped by behavior, physical symptoms and disease — causes, diagnosis and treatment for each.`,
+    description,
     alternates: { canonical: `${SITE_URL}/fish-health/fish/${params.slug}` },
   }
 }
