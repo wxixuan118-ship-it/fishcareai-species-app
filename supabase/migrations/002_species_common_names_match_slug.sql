@@ -9,6 +9,8 @@
 -- search engines normalise those; renaming them would make the name wrong.
 --
 -- Every UPDATE is keyed on the current value, so re-running is a no-op.
+-- Applied to Supabase via the SQL editor and synced to the app DB with
+-- POST /api/migrate on 2026-09-20.
 -- Run:  psql "$DATABASE_URL" -f supabase/migrations/002_species_common_names_match_slug.sql
 
 BEGIN;
@@ -36,30 +38,36 @@ SET common_name      = r.new_name,
 FROM rename r
 WHERE s.slug = r.slug AND s.common_name = r.old_name;
 
--- 2. Editorial copy on the 30 health pages per species that names the fish.
-UPDATE fish_health_content c
-SET intro             = replace(c.intro,             r.old_name, r.new_name),
-    prevention        = replace(c.prevention,        r.old_name, r.new_name),
-    when_to_seek_help = replace(c.when_to_seek_help, r.old_name, r.new_name),
-    common_causes     = replace(c.common_causes::text,   r.old_name, r.new_name)::jsonb,
-    diagnosis_steps   = replace(c.diagnosis_steps::text, r.old_name, r.new_name)::jsonb,
-    treatment_steps   = replace(c.treatment_steps::text, r.old_name, r.new_name)::jsonb,
-    faq               = replace(c.faq::text,             r.old_name, r.new_name)::jsonb,
-    meta_title        = replace(c.meta_title,        r.old_name, r.new_name),
-    meta_description  = replace(c.meta_description,  r.old_name, r.new_name),
-    updated_at        = NOW()
-FROM rename r
-JOIN species s ON s.slug = r.slug
-WHERE c.fish_id = s.id
-  AND (c.intro LIKE '%' || r.old_name || '%'
-       OR c.prevention LIKE '%' || r.old_name || '%'
-       OR c.when_to_seek_help LIKE '%' || r.old_name || '%'
-       OR c.common_causes::text LIKE '%' || r.old_name || '%'
-       OR c.diagnosis_steps::text LIKE '%' || r.old_name || '%'
-       OR c.treatment_steps::text LIKE '%' || r.old_name || '%'
-       OR c.faq::text LIKE '%' || r.old_name || '%'
-       OR c.meta_title LIKE '%' || r.old_name || '%'
-       OR c.meta_description LIKE '%' || r.old_name || '%');
+-- 2. Editorial copy on the health pages that names the fish. The list columns
+--    are jsonb on the app DB but jsonb[] on Supabase, so read each column's
+--    actual type from the catalogue and cast back to it.
+DO $$
+DECLARE
+  r   record;
+  col record;
+BEGIN
+  FOR r IN SELECT * FROM rename LOOP
+    FOR col IN
+      SELECT a.attname AS name, format_type(a.atttypid, a.atttypmod) AS typ
+      FROM pg_attribute a
+      JOIN pg_class c ON c.oid = a.attrelid
+      JOIN pg_namespace n ON n.oid = c.relnamespace
+      WHERE n.nspname = 'public' AND c.relname = 'fish_health_content'
+        AND a.attnum > 0 AND NOT a.attisdropped
+        AND a.attname IN ('intro', 'prevention', 'when_to_seek_help', 'common_causes',
+                          'diagnosis_steps', 'treatment_steps', 'faq',
+                          'meta_title', 'meta_description')
+    LOOP
+      EXECUTE format(
+        'UPDATE fish_health_content c
+            SET %1$I = replace(c.%1$I::text, $1, $2)::%2$s, updated_at = NOW()
+           FROM species s
+          WHERE c.fish_id = s.id AND s.slug = $3 AND c.%1$I::text LIKE $4',
+        col.name, col.typ)
+      USING r.old_name, r.new_name, r.slug, '%' || r.old_name || '%';
+    END LOOP;
+  END LOOP;
+END $$;
 
 -- What changed.
 SELECT s.slug, s.common_name,
