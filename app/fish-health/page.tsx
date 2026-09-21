@@ -307,7 +307,7 @@ export default async function FishHealthHubPage() {
         <figure style={{ margin: '28px 0 8px', maxWidth: 860 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/fish-health/fish-diseases-symptom-map.svg"
+            src={HERO_IMAGE}
             alt="Fish diseases symptom map: where ich, fin rot, fungus, dropsy, popeye and swim bladder problems show on a fish's eyes, gills, fins, skin, belly and spine"
             width={1200}
             height={640}
