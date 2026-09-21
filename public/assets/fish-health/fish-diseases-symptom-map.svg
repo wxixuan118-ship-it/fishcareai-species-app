@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" role="img" aria-labelledby="t d">
+  <title id="t">Fish diseases symptom map</title>
+  <desc id="d">Where the most common aquarium fish diseases show on the body: eyes, gills, fins, skin, belly and spine, with the symptom each area points to.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07192D"/>
+      <stop offset="1" stop-color="#0D2741"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2A9CD8"/>
+      <stop offset="1" stop-color="#1A5A8A"/>
+    </linearGradient>
+    <style>
+      .lbl{font:600 20px -apple-system,'Segoe UI',Arial,sans-serif;fill:#D8EAF5}
+      .sub{font:15px -apple-system,'Segoe UI',Arial,sans-serif;fill:#7AAABE}
+      .ttl{font:800 30px -apple-system,'Segoe UI',Arial,sans-serif;fill:#ffffff}
+      .cap{font:15px -apple-system,'Segoe UI',Arial,sans-serif;fill:#7AAABE}
+      .ln{stroke:#3BB3F0;stroke-width:2;fill:none;stroke-dasharray:5 4}
+      .dot{fill:#F5A623;stroke:#07192D;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <text x="40" y="52" class="ttl">Fish diseases symptom map — where each problem shows first</text>
+  <text x="40" y="80" class="cap">Match what you see on your fish to the area, then open the matching guide below.</text>
+
+  <!-- fish body -->
+  <g transform="translate(300,180)">
+    <!-- tail -->
+    <path d="M470,150 L560,70 L540,150 L560,230 Z" fill="#1A5A8A" stroke="#7DEBFF" stroke-width="2" opacity=".95"/>
+    <!-- dorsal fin -->
+    <path d="M170,72 Q250,-20 380,60 L360,80 Q250,40 190,86 Z" fill="#1A5A8A" stroke="#7DEBFF" stroke-width="2"/>
+    <!-- anal fin -->
+    <path d="M230,220 Q300,290 380,235 L360,215 Q300,250 245,205 Z" fill="#1A5A8A" stroke="#7DEBFF" stroke-width="2"/>
+    <!-- body -->
+    <ellipse cx="270" cy="150" rx="230" ry="95" fill="url(#body)" stroke="#7DEBFF" stroke-width="3"/>
+    <!-- gill cover -->
+    <path d="M120,80 Q170,150 120,220" fill="none" stroke="#7DEBFF" stroke-width="3" opacity=".8"/>
+    <!-- pectoral fin -->
+    <path d="M160,165 Q210,200 190,225 Q150,205 160,165 Z" fill="#3BB3F0" stroke="#7DEBFF" stroke-width="2" opacity=".9"/>
+    <!-- eye -->
+    <circle cx="90" cy="125" r="16" fill="#ffffff"/>
+    <circle cx="94" cy="127" r="8" fill="#07192D"/>
+    <!-- lateral line / spine -->
+    <path d="M60,150 Q270,120 480,150" fill="none" stroke="#7DEBFF" stroke-width="1.5" stroke-dasharray="3 5" opacity=".7"/>
+    <!-- ich spots -->
+    <g fill="#ffffff" opacity=".9">
+      <circle cx="230" cy="110" r="4"/><circle cx="260" cy="135" r="3.5"/><circle cx="300" cy="105" r="4"/>
+      <circle cx="330" cy="150" r="3.5"/><circle cx="280" cy="180" r="4"/><circle cx="360" cy="120" r="3"/>
+    </g>
+    <!-- belly bulge hint -->
+    <path d="M150,215 Q270,275 390,215" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="6 4" opacity=".8"/>
+  </g>
+
+  <!-- callouts -->
+  <!-- eyes -->
+  <circle cx="390" cy="305" r="7" class="dot"/><path d="M390,305 L250,230" class="ln"/>
+  <text x="40" y="215" class="lbl">Eyes</text>
+  <text x="40" y="240" class="sub">Popeye · Cloudy eyes</text>
+
+  <!-- gills -->
+  <circle cx="430" cy="360" r="7" class="dot"/><path d="M430,360 L250,420" class="ln"/>
+  <text x="40" y="405" class="lbl">Gills &amp; breathing</text>
+  <text x="40" y="430" class="sub">Rapid breathing · Gasping at surface</text>
+
+  <!-- skin / body -->
+  <circle cx="590" cy="290" r="7" class="dot"/><path d="M590,290 L650,150" class="ln"/>
+  <text x="560" y="120" class="lbl">Skin &amp; body</text>
+  <text x="560" y="145" class="sub">White spots (ich) · Velvet · Fuzzy growth · Red streaks</text>
+
+  <!-- fins -->
+  <circle cx="820" cy="345" r="7" class="dot"/><path d="M820,345 L940,300" class="ln"/>
+  <text x="900" y="270" class="lbl">Fins &amp; tail</text>
+  <text x="900" y="295" class="sub">Fin rot · Torn fins · Clamped fins</text>
+
+  <!-- belly -->
+  <circle cx="570" cy="425" r="7" class="dot"/><path d="M570,425 L640,540" class="ln"/>
+  <text x="560" y="575" class="lbl">Belly</text>
+  <text x="560" y="600" class="sub">Dropsy (bloated) · Sunken belly</text>
+
+  <!-- spine / swimming -->
+  <circle cx="700" cy="310" r="7" class="dot"/><path d="M700,310 L880,470" class="ln"/>
+  <text x="820" y="505" class="lbl">Spine &amp; swimming</text>
+  <text x="820" y="530" class="sub">Curved body · Swimming sideways · Floating</text>
+
+  <text x="40" y="605" class="cap">fishcareai.com/fish-health · 30 symptoms · 257 species</text>
+</svg>

@@ -121,3 +121,28 @@ export async function getHealthSpeciesList(): Promise<HealthSpeciesSummary[]> {
   `
   return rows
 }
+
+export type HealthExample = {
+  problem_id: string
+  fish_slug:  string
+  fish_name:  string
+  slug:       string
+}
+
+// Example guide per problem for a handful of popular species, so the hub can
+// link straight into leaf pages instead of only into the per-species listings.
+export async function getHealthExamplesByProblem(fishSlugs: string[]): Promise<HealthExample[]> {
+  if (!fishSlugs.length) return []
+  const rows = await sql<HealthExample[]>`
+    SELECT
+      fhc.problem_id,
+      s.slug        AS fish_slug,
+      s.common_name AS fish_name,
+      fhc.slug
+    FROM fish_health_content fhc
+    JOIN species s ON fhc.fish_id = s.id
+    WHERE s.slug = ANY(${fishSlugs}) AND fhc.published = true
+    ORDER BY array_position(${fishSlugs}::text[], s.slug)
+  `
+  return rows
+}

@@ -549,3 +549,7 @@ p:last-child { margin-bottom: 0; }
 .related-health-card:hover  { border-color: var(--p); background: rgba(42,156,216,.1); }
 .related-health-fish  { font-size: 0.78rem; color: var(--mu); margin-bottom: 2px; }
 .related-health-prob  { font-size: 0.9rem; font-weight: 700; color: var(--tx); }
+
+/* ── Fish Health hub prose ───────────────────────────────── */
+/* The hub mixes .artc prose with bare hub headings; keep both readable on navy. */
+.hub-copy h2 { color: var(--tx); font-size: clamp(1.3rem, 3vw, 1.55rem); }
