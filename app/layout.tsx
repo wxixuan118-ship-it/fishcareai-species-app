@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Script from 'next/script'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
@@ -15,11 +16,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-global-chrome="false">
       <body>
         <NavBar />
         <main>{children}</main>
         <Footer />
+        {/* GA4 + Clarity + cookie consent, shared with the static site.
+            data-global-chrome="false" keeps this app's own NavBar/Footer. */}
+        <Script
+          src="/assets/site-compliance.js?v=20260923-analytics"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
