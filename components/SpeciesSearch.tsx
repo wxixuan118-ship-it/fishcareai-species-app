@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { HealthSpeciesSummary } from '@/lib/fish-health'
+import { fishHealthHref } from '@/lib/consolidated'
 
 interface Props {
   speciesList: HealthSpeciesSummary[]
@@ -81,7 +82,7 @@ export default function SpeciesSearch({ speciesList }: Props) {
         {filtered.map((s) => (
           <a
             key={s.slug}
-            href={`/fish-health/fish/${s.slug}`}
+            href={fishHealthHref(s.slug)}
             style={{
               display: 'block',
               background: 'var(--bg)',

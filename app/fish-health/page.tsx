@@ -7,6 +7,7 @@ import {
 } from '@/lib/fish-health'
 import type { ProblemCategory, Urgency } from '@/types/fish-health'
 import SpeciesSearch from '@/components/SpeciesSearch'
+import { healthHref } from '@/lib/consolidated'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 const CANONICAL = `${SITE_URL}/fish-health`
@@ -374,7 +375,7 @@ export default async function FishHealthHubPage() {
                             <span key={e.slug}>
                               {i > 0 && ' · '}
                               <a
-                                href={`/fish-health/${e.slug}`}
+                                href={healthHref(e.slug)}
                                 title={`${e.fish_name} ${p.problem_name.toLowerCase()}`}
                                 style={{ fontWeight: 600 }}
                               >

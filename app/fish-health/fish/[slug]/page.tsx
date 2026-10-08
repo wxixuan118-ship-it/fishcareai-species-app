@@ -1,8 +1,9 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getHealthPagesByFish } from '@/lib/fish-health'
 import type { HealthPageSummary, ProblemCategory } from '@/types/fish-health'
 import sql from '@/lib/db'
+import { healthHref, consolidatedFishUrl } from '@/lib/consolidated'
 
 // Rendered on first request, then served from the ISR cache (see ../../[slug]/page.tsx
 // for why generateStaticParams must exist and return nothing).
@@ -82,7 +83,7 @@ function ProblemCard({ page }: { page: HealthPageSummary }) {
   const badge = URGENCY_BADGE[page.urgency] ?? URGENCY_BADGE.monitor
   return (
     <a
-      href={`/fish-health/${page.slug}`}
+      href={healthHref(page.slug)}
       style={{
         display: 'block',
         background: 'var(--bg)',
@@ -104,6 +105,9 @@ function ProblemCard({ page }: { page: HealthPageSummary }) {
 export default async function FishHealthListPage(
   { params }: { params: { slug: string } }
 ) {
+  const merged = consolidatedFishUrl(params.slug)
+  if (merged) permanentRedirect(merged)
+
   const [species] = await sql<{ common_name: string; scientific_name: string; slug: string }[]>`
     SELECT common_name, scientific_name, slug FROM species WHERE slug = ${params.slug} LIMIT 1
   `

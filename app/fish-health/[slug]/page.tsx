@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import {
   getFishHealthPage,
@@ -19,6 +19,7 @@ import RelatedHealthLinks from '@/components/RelatedHealthLinks'
 import CalloutBox        from '@/components/CalloutBox'
 import FaqAccordion      from '@/components/FaqAccordion'
 import TableOfContents   from '@/components/TableOfContents'
+import { fishHealthHref, consolidatedHealthUrl } from '@/lib/consolidated'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -102,6 +103,9 @@ export async function generateMetadata(
 export default async function FishHealthDiagnosisPage(
   { params }: { params: { slug: string } }
 ) {
+  const merged = consolidatedHealthUrl(params.slug)
+  if (merged) permanentRedirect(merged)
+
   const page = await getFishHealthPage(params.slug)
   if (!page) notFound()
 
@@ -393,7 +397,7 @@ export default async function FishHealthDiagnosisPage(
             </div>
             <div style={{ marginBottom: 8 }}>
               <a
-                href={`/fish-health/fish/${species.slug}`}
+                href={fishHealthHref(species.slug)}
                 style={{
                   display: 'block',
                   textAlign: 'center',

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import sql from '@/lib/db'
+import { consolidatedHealthUrl, consolidatedFishUrl } from '@/lib/consolidated'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -19,14 +20,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     `,
   ])
 
-  const healthUrls: MetadataRoute.Sitemap = healthRows.map((r) => ({
+  const healthUrls: MetadataRoute.Sitemap = healthRows.filter((r) => !consolidatedHealthUrl(r.slug)).map((r) => ({
     url: `${SITE_URL}/fish-health/${r.slug}`,
     lastModified: r.updated_at ?? new Date(),
     changeFrequency: 'monthly',
     priority: 0.85,
   }))
 
-  const fishListingUrls: MetadataRoute.Sitemap = speciesRows.map((r) => ({
+  const fishListingUrls: MetadataRoute.Sitemap = speciesRows.filter((r) => !consolidatedFishUrl(r.slug)).map((r) => ({
     url: `${SITE_URL}/fish-health/fish/${r.slug}`,
     lastModified: r.updated_at ?? new Date(),
     changeFrequency: 'monthly',

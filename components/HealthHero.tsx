@@ -1,6 +1,7 @@
 'use client'
 
 import type { Urgency } from '@/types/fish-health'
+import { fishHealthHref } from '@/lib/consolidated'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -54,7 +55,7 @@ export default function HealthHero({
           <span>/</span>
           <a href="/fish-health/">Fish Health</a>
           <span>/</span>
-          <a href={`/fish-health/fish/${fishSlug}`}>{fishName}</a>
+          <a href={fishHealthHref(fishSlug)}>{fishName}</a>
           <span>/</span>
           <span style={{ color: 'rgba(255,255,255,.85)' }}>
             {problemName}
