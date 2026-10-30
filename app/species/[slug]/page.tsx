@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
 import { resolveSpeciesTitle } from '@/lib/species-meta'
+import { mainSiteGuide } from '@/lib/main-site-guides'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -77,6 +78,7 @@ export default async function SpeciesEncyclopediaPage(
   // The care-guide route 404s unless a published species_guides row exists,
   // so only link to it when there is one.
   const hasGuide    = await hasPublishedGuide(species.id)
+  const mainGuide   = mainSiteGuide(species.slug)
 
   // Schema.org JSON-LD
   const breadcrumbSchema = {
@@ -127,6 +129,13 @@ export default async function SpeciesEncyclopediaPage(
             {/* Overview */}
             <h2 id="overview">{species.common_name} Overview</h2>
             <p>{species.sections.overview}</p>
+
+            {mainGuide && (
+              <CalloutBox variant="ok">
+                <strong>In-depth guide:</strong> our{' '}
+                <a href={mainGuide.href}>{mainGuide.label}</a> covers {mainGuide.summary}.
+              </CalloutBox>
+            )}
 
             <CalloutBox>
               <strong>Quick fact:</strong>{' '}
@@ -251,6 +260,7 @@ export default async function SpeciesEncyclopediaPage(
               relatedSlugs={species.related_species}
               speciesName={species.common_name}
               hasGuide={hasGuide}
+              mainGuide={mainGuide}
             />
 
             {/* Editorial note */}

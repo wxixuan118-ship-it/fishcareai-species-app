@@ -5,6 +5,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com
 
 export const dynamic = 'force-dynamic'
 
+// Care guides the main site's nginx 301s to a /guides/ page — keep redirects out of the sitemap.
+const REDIRECTED_GUIDE_SLUGS = new Set(['betta-fish'])
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [speciesRows, guideRows] = await Promise.all([
     sql<{ slug: string; updated_at: Date | null }[]>`
@@ -26,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  const guideUrls: MetadataRoute.Sitemap = guideRows.map((r) => ({
+  const guideUrls: MetadataRoute.Sitemap = guideRows.filter((r) => !REDIRECTED_GUIDE_SLUGS.has(r.slug)).map((r) => ({
     url: `${SITE_URL}/species/${r.slug}/care-guide`,
     lastModified: r.updated_at ?? new Date(),
     changeFrequency: 'monthly',

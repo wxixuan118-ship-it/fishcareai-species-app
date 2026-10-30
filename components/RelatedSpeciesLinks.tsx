@@ -1,3 +1,5 @@
+import type { MainSiteGuide } from '@/lib/main-site-guides'
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
 interface Props {
@@ -6,6 +8,8 @@ interface Props {
   speciesName: string
   /** Only link to the care guide when a published one exists — the route 404s otherwise. */
   hasGuide?: boolean
+  /** In-depth guide for this species on the main site, if there is one. */
+  mainGuide?: MainSiteGuide | null
 }
 
 // Human-readable label from slug
@@ -13,7 +17,7 @@ function slugToLabel(slug: string): string {
   return slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
-export default function RelatedSpeciesLinks({ currentSlug, relatedSlugs, speciesName, hasGuide = false }: Props) {
+export default function RelatedSpeciesLinks({ currentSlug, relatedSlugs, speciesName, hasGuide = false, mainGuide = null }: Props) {
   return (
     <div style={{ marginTop: 32 }}>
       <h2>Related Species & Guides</h2>
@@ -22,6 +26,11 @@ export default function RelatedSpeciesLinks({ currentSlug, relatedSlugs, species
         {hasGuide && (
           <a href={`/species/${currentSlug}/care-guide`}>
             📋 {speciesName} Care Guide
+          </a>
+        )}
+        {mainGuide && (
+          <a href={mainGuide.href}>
+            📋 {mainGuide.label}
           </a>
         )}
         {/* Related species encyclopedia pages */}
