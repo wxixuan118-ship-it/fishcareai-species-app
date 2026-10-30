@@ -2,8 +2,11 @@ import { getAllSpecies } from '@/lib/species'
 import SpeciesGrid from '@/components/SpeciesGrid'
 import type { Metadata } from 'next'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
+
 export const metadata: Metadata = {
   title: 'Aquarium Fish Encyclopedia A–Z',
+  alternates: { canonical: `${SITE_URL}/species` },
   description: 'Browse 48+ freshwater and saltwater fish species profiles. Filter A–Z, find water parameters, tank size, diet, and care difficulty for every species.',
 }
 

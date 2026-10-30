@@ -134,7 +134,7 @@ export default async function FishHealthListPage(
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',                   item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Fish Health', item: `${SITE_URL}/fish-health/` },
+      { '@type': 'ListItem', position: 2, name: 'Fish Health', item: `${SITE_URL}/fish-health` },
       { '@type': 'ListItem', position: 3, name: `${fish} Health Problems`, item: canonical },
     ],
   }
@@ -174,7 +174,7 @@ export default async function FishHealthListPage(
           <div className="breadcrumb">
             <a href={SITE_URL}>Home</a>
             <span>/</span>
-            <a href="/fish-health/">Fish Health</a>
+            <a href="/fish-health">Fish Health</a>
             <span>/</span>
             <span style={{ color: 'rgba(255,255,255,.85)' }}>{fish}</span>
           </div>
@@ -191,7 +191,7 @@ export default async function FishHealthListPage(
           <a href={`/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
             ← View full {fish} care guide
           </a>
-          <a href="/fish-health/" style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
+          <a href="/fish-health" style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
             ← Fish Health Hub
           </a>
         </div>
@@ -237,7 +237,7 @@ export default async function FishHealthListPage(
         <div className="cta-box" style={{ marginTop: 48 }}>
           <h3>Browse All Fish Health Guides</h3>
           <p>See all 30 fish health problem categories with diagnosis and treatment guides for hundreds of species.</p>
-          <a className="btn" href="/fish-health/">Fish Health Hub →</a>
+          <a className="btn" href="/fish-health">Fish Health Hub →</a>
         </div>
       </div>
     </>

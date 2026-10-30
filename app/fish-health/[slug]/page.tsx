@@ -19,7 +19,7 @@ import RelatedHealthLinks from '@/components/RelatedHealthLinks'
 import CalloutBox        from '@/components/CalloutBox'
 import FaqAccordion      from '@/components/FaqAccordion'
 import TableOfContents   from '@/components/TableOfContents'
-import { fishHealthHref, consolidatedHealthUrl } from '@/lib/consolidated'
+import { fishHealthHref, consolidatedHealthUrl, careGuideHref } from '@/lib/consolidated'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -143,7 +143,7 @@ export default async function FishHealthDiagnosisPage(
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',                    item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Fish Health',             item: `${SITE_URL}/fish-health/` },
+      { '@type': 'ListItem', position: 2, name: 'Fish Health',             item: `${SITE_URL}/fish-health` },
       { '@type': 'ListItem', position: 3, name: fishName,                  item: `${SITE_URL}/fish-health/fish/${species.slug}` },
       { '@type': 'ListItem', position: 4, name: subject, item: canonical },
     ],
@@ -277,7 +277,7 @@ export default async function FishHealthDiagnosisPage(
                   Learn everything about keeping a healthy {fishName} — tank setup, water parameters,
                   diet, tank mates, and disease prevention.
                 </p>
-                <a className="btn" href={`/species/${species.slug}/care-guide`}>
+                <a className="btn" href={careGuideHref(species.slug)}>
                   {fishName} Care Guide →
                 </a>
               </div>
@@ -415,7 +415,7 @@ export default async function FishHealthDiagnosisPage(
             </div>
             <div style={{ marginBottom: 16 }}>
               <a
-                href="/fish-health/"
+                href="/fish-health"
                 style={{
                   display: 'block',
                   textAlign: 'center',

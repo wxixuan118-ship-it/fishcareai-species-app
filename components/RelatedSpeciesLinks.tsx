@@ -1,3 +1,4 @@
+import { careGuideHref } from '@/lib/consolidated'
 import type { MainSiteGuide } from '@/lib/main-site-guides'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
@@ -24,7 +25,7 @@ export default function RelatedSpeciesLinks({ currentSlug, relatedSlugs, species
       <div className="guide-links" style={{ marginTop: 12 }}>
         {/* Link to own care guide — only when one is published */}
         {hasGuide && (
-          <a href={`/species/${currentSlug}/care-guide`}>
+          <a href={careGuideHref(currentSlug)}>
             📋 {speciesName} Care Guide
           </a>
         )}
@@ -43,7 +44,7 @@ export default function RelatedSpeciesLinks({ currentSlug, relatedSlugs, species
         <a href={`${SITE_URL}/guides/`}>
           📚 All Care Guides
         </a>
-        <a href={`${SITE_URL}/species/`}>
+        <a href={`${SITE_URL}/species`}>
           🔍 Fish Encyclopedia
         </a>
       </div>

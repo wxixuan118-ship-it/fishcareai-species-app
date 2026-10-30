@@ -53,7 +53,7 @@ export default function HealthHero({
         <div className="breadcrumb">
           <a href={SITE_URL}>Home</a>
           <span>/</span>
-          <a href="/fish-health/">Fish Health</a>
+          <a href="/fish-health">Fish Health</a>
           <span>/</span>
           <a href={fishHealthHref(fishSlug)}>{fishName}</a>
           <span>/</span>

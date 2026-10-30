@@ -12,8 +12,8 @@ export default function Footer() {
 
           <div className="ftcol">
             <h5>Explore</h5>
-            <a href={`${SITE_URL}/species/`}>Fish Species</a>
-            <a href="/fish-health/">Fish Health</a>
+            <a href={`${SITE_URL}/species`}>Fish Species</a>
+            <a href="/fish-health">Fish Health</a>
             <a href={`${SITE_URL}/aquarium-fish-diseases/clownfish/`}>Clownfish Health Problems</a>
             <a href={`${SITE_URL}/guides/`}>Guides</a>
             <a href={`${SITE_URL}/tools/`}>Aquarium Tools</a>
@@ -23,7 +23,7 @@ export default function Footer() {
           <div className="ftcol">
             <h5>Popular Tools</h5>
             <a href={`${SITE_URL}/tools/fish-compatibility-checker/`}>Compatibility Checker</a>
-            <a href={`${SITE_URL}/tools/tank-size-calculator/`}>Tank Size Calculator</a>
+            <a href={`${SITE_URL}/tools/aquarium-size-calculator/`}>Tank Size Calculator</a>
             <a href={`${SITE_URL}/tools/water-parameter-checker/`}>Water Parameters</a>
             <a href={`${SITE_URL}/tools/fish-feeding-calculator/`}>Feeding Calculator</a>
             <a href={`${SITE_URL}/tools/aquarium-planner/`}>Aquarium Planner</a>

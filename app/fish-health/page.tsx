@@ -496,7 +496,7 @@ export default async function FishHealthHubPage() {
               tank mate or a shoaling species kept alone keeps stress hormones high and the immune
               system low. The{' '}
               <a href={`${SITE_URL}/tools/fish-compatibility-checker/`}>fish compatibility checker</a> and{' '}
-              <a href={`${SITE_URL}/tools/tank-size-calculator/`}>tank size calculator</a> flag both
+              <a href={`${SITE_URL}/tools/aquarium-size-calculator/`}>tank size calculator</a> flag both
               problems before they cause disease.
             </li>
             <li>

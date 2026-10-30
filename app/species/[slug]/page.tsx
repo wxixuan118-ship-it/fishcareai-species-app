@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { careGuideHref } from '@/lib/consolidated'
 import type { Metadata } from 'next'
 import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
 import { resolveSpeciesTitle } from '@/lib/species-meta'
@@ -73,7 +74,7 @@ export default async function SpeciesEncyclopediaPage(
   if (!species) notFound()
 
   const canonical   = `${SITE_URL}/species/${species.slug}`
-  const guideUrl    = `/species/${species.slug}/care-guide`
+  const guideUrl    = careGuideHref(species.slug)
 
   // The care-guide route 404s unless a published species_guides row exists,
   // so only link to it when there is one.
@@ -86,7 +87,7 @@ export default async function SpeciesEncyclopediaPage(
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',        item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Encyclopedia', item: `${SITE_URL}/species/` },
+      { '@type': 'ListItem', position: 2, name: 'Encyclopedia', item: `${SITE_URL}/species` },
       { '@type': 'ListItem', position: 3, name: species.common_name, item: canonical },
     ],
   }
