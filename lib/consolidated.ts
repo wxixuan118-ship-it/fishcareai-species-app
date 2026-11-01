@@ -56,5 +56,82 @@ export function consolidatedFishUrl(fishSlug: string): string | null {
   return m ? clownfishGuide(m[1]) : null
 }
 
+// 2026-10-30: 60 template symptom pages Google crawled and declined to index
+// (GSC "Crawled - currently not indexed", see reports/gsc-crawled-not-indexed-2026-10-30.csv
+// on the main site). Low-demand species x symptom combinations with no cluster
+// page to merge into, so they are retired outright rather than redirected:
+// lib/fish-health.ts stops serving and listing them and the routes 404.
+export const RETIRED_HEALTH_SLUGS: readonly string[] = [
+  'adolfo-cory-aggressive',
+  'arc-eye-hawkfish-clamped-fins',
+  'asian-stone-catfish-jumping',
+  'betta-imbellis-pale-color',
+  'black-ruby-barb-coughing',
+  'black-skirt-tetra-floating',
+  'blue-danio-losing-color',
+  'bolivian-ram-red-streaks',
+  'celestial-pearl-danio-white-spots',
+  'checkerboard-cichlid-coughing',
+  'checkered-barb-hiding',
+  'chocolate-gourami-not-eating',
+  'cockatoo-cichlid-fuzzy-growth',
+  'denison-barb-curled-body',
+  'electric-yellow-cichlid-clamped-fins',
+  'elephant-nose-fish-swimming-sideways',
+  'emerald-catfish-fuzzy-growth',
+  'endlers-livebearer-bulging-eyes',
+  'endlers-livebearer-sunken-belly',
+  'fairy-cichlid-red-streaks',
+  'fairy-cichlid-rubbing',
+  'figure-eight-puffer-coughing',
+  'figure-eight-puffer-mucus-coating',
+  'flame-angelfish-fin-rot',
+  'four-eyed-fish-red-streaks',
+  'french-angelfish-bloated',
+  'garnet-tetra-swimming-sideways',
+  'german-blue-ram-curled-body',
+  'horseface-loach-black-spots',
+  'jewel-cichlid-rubbing',
+  'julidochromis-spots-on-fins',
+  'kissing-gourami-rubbing',
+  'neon-rainbowfish-aggressive',
+  'odessa-barb-white-spots',
+  'ornate-bichir-bulging-eyes',
+  'pacific-blue-tang-pale-color',
+  'peacock-bass-not-eating',
+  'peacock-cichlid-red-streaks',
+  'peacock-spiny-eel-jumping',
+  'porcupine-puffer-lethargic',
+  'pristella-tetra-white-spots',
+  'rainbow-shark-losing-color',
+  'red-bellied-piranha-sinking',
+  'red-empress-cichlid-hiding',
+  'royal-gramma-losing-color',
+  'rummy-nose-tetra-sunken-belly',
+  'salt-and-pepper-cory-not-eating',
+  'siamese-algae-eater-curled-body',
+  'silver-arowana-sunken-belly',
+  'silver-dollar-pale-color',
+  'snowflake-moray-aggressive',
+  'snowflake-moray-lethargic',
+  'spanish-hogfish-spots-on-fins',
+  'striped-headstander-fuzzy-growth',
+  'striped-panchax-coughing',
+  'swordtail-torn-fins',
+  'tinfoil-barb-floating',
+  'tinfoil-barb-mucus-coating',
+  'turquoise-rainbowfish-gasping',
+  'venustus-cichlid-pale-color',
+]
+
+const RETIRED_HEALTH = new Set(RETIRED_HEALTH_SLUGS)
+
+/** true when /fish-health/<slug> was retired with no replacement — serve 404, never link. */
+export const isRetiredHealth = (slug: string): boolean => RETIRED_HEALTH.has(slug)
+
+/** true when this app must neither serve nor link /fish-health/<slug> (merged or retired). */
+export const healthSlugIsGone = (slug: string): boolean =>
+  isRetiredHealth(slug) || consolidatedHealthUrl(slug) !== null
+
 export const healthHref = (slug: string) => consolidatedHealthUrl(slug) ?? `/fish-health/${slug}`
 export const fishHealthHref = (fishSlug: string) => consolidatedFishUrl(fishSlug) ?? `/fish-health/fish/${fishSlug}`

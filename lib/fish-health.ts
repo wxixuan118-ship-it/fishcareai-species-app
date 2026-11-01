@@ -1,4 +1,5 @@
 import sql from './db'
+import { RETIRED_HEALTH_SLUGS, isRetiredHealth } from './consolidated'
 import type {
   FishHealthPage,
   FishHealthContent,
@@ -7,7 +8,14 @@ import type {
   HealthPageSummary,
 } from '@/types/fish-health'
 
+// Retired slugs are excluded in SQL rather than filtered afterwards, so the
+// per-species counts on the hub stay consistent with the links beneath them.
+const RETIRED = RETIRED_HEALTH_SLUGS as string[]
+
 export async function getFishHealthPage(slug: string): Promise<FishHealthPage | null> {
+  // Returning null here makes both the route and its generateMetadata 404.
+  if (isRetiredHealth(slug)) return null
+
   const [content] = await sql`
     SELECT * FROM fish_health_content WHERE slug = ${slug} AND published = true LIMIT 1
   `
@@ -33,7 +41,9 @@ export async function getFishHealthPage(slug: string): Promise<FishHealthPage | 
 
 export async function getAllHealthSlugs(): Promise<string[]> {
   const rows = await sql<{ slug: string }[]>`
-    SELECT slug FROM fish_health_content WHERE published = true ORDER BY slug
+    SELECT slug FROM fish_health_content
+    WHERE published = true AND slug <> ALL(${RETIRED})
+    ORDER BY slug
   `
   return rows.map(r => r.slug)
 }
@@ -51,6 +61,7 @@ export async function getRelatedHealthPages(slugs: string[]): Promise<HealthPage
     JOIN species s ON fhc.fish_id = s.id
     JOIN health_problems hp ON fhc.problem_id = hp.id
     WHERE fhc.slug = ANY(${slugs}) AND fhc.published = true
+      AND fhc.slug <> ALL(${RETIRED})
   `
   return rows.map(r => ({
     slug:         r.slug as string,
@@ -72,6 +83,7 @@ export async function getHealthPagesByFish(fishSlug: string): Promise<HealthPage
     JOIN species s ON fhc.fish_id = s.id
     JOIN health_problems hp ON fhc.problem_id = hp.id
     WHERE s.slug = ${fishSlug} AND fhc.published = true
+      AND fhc.slug <> ALL(${RETIRED})
     ORDER BY fhc.slug
   `
   return rows.map(r => ({
@@ -115,7 +127,7 @@ export async function getHealthSpeciesList(): Promise<HealthSpeciesSummary[]> {
       MIN(fhc.slug)      AS first_health_slug
     FROM fish_health_content fhc
     JOIN species s ON fhc.fish_id = s.id
-    WHERE fhc.published = true
+    WHERE fhc.published = true AND fhc.slug <> ALL(${RETIRED})
     GROUP BY s.slug, s.common_name, s.scientific_name
     ORDER BY s.common_name
   `
@@ -142,6 +154,7 @@ export async function getHealthExamplesByProblem(fishSlugs: string[]): Promise<H
     FROM fish_health_content fhc
     JOIN species s ON fhc.fish_id = s.id
     WHERE s.slug = ANY(${fishSlugs}) AND fhc.published = true
+      AND fhc.slug <> ALL(${RETIRED})
     ORDER BY array_position(${fishSlugs}::text[], s.slug)
   `
   return rows
