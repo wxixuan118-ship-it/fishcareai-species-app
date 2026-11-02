@@ -122,6 +122,18 @@ export const RETIRED_HEALTH_SLUGS: readonly string[] = [
   'tinfoil-barb-mucus-coating',
   'turquoise-rainbowfish-gasping',
   'venustus-cichlid-pale-color',
+  // 2026-11-01: GSC "Discovered - currently not indexed" (reports/gsc-discovered-not-indexed-2026-11-01.csv
+  // on the main site). Same cold-tail pattern: ~700-word template pages for species with no
+  // /aquarium-fish-diseases/ hub to merge into. variatus-platy-pale-color is here despite the
+  // species being common — the page itself drew 11 impressions and 1 click in 3 months.
+  'threadfin-rainbowfish-losing-color',
+  'tropheus-cichlid-sinking',
+  'turquoise-rainbowfish-floating',
+  'upside-down-catfish-bloated',
+  'variatus-platy-pale-color',
+  'venustus-cichlid-sinking',
+  'watchman-goby-rubbing',
+  'zebra-pleco-bulging-eyes',
 ]
 
 const RETIRED_HEALTH = new Set(RETIRED_HEALTH_SLUGS)
