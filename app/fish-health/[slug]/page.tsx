@@ -20,6 +20,7 @@ import CalloutBox        from '@/components/CalloutBox'
 import FaqAccordion      from '@/components/FaqAccordion'
 import TableOfContents   from '@/components/TableOfContents'
 import { fishHealthHref, consolidatedHealthUrl, careGuideHref } from '@/lib/consolidated'
+import { healthOverviewHref } from '@/lib/health-overview'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -126,6 +127,7 @@ export default async function FishHealthDiagnosisPage(
 
   // The care-guide route 404s unless a published species_guides row exists.
   const hasGuide     = await hasPublishedGuide(species.id)
+  const overviewHref = healthOverviewHref(species.slug)
 
   const tocItems = buildTocItems({
     causes:      (content.common_causes?.length ?? 0) > 0,
@@ -223,6 +225,14 @@ export default async function FishHealthDiagnosisPage(
 
             {/* Urgency banner (visible only for urgent/emergency) */}
             <UrgencyBanner urgency={problem.urgency} fishName={fishName} />
+
+            {/* Species overview — one hub per species for broad "health problems" queries */}
+            {overviewHref && (
+              <CalloutBox>
+                {subject} is one symptom. For every common disease, its signs and treatment, see{' '}
+                <a href={overviewHref}>{fishName} Health Problems: Symptoms, Diseases &amp; Treatment</a>.
+              </CalloutBox>
+            )}
 
             {/* Common Causes */}
             {content.common_causes?.length > 0 && (
