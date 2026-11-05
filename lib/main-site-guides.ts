@@ -22,6 +22,32 @@ const MAIN_SITE_GUIDES: Record<string, MainSiteGuide> = {
     label: 'Corydoras Care Guide',
     summary: 'adult size, tank size, water, diet, popular types and breeding',
   },
+  oscar: {
+    href: '/guides/oscar-fish-care/',
+    label: 'Oscar Fish Care Guide',
+    summary: 'adult size, lifespan, tank size, tank mates and feeding',
+  },
+  swordtail: {
+    href: '/guides/swordtail-fish-care-and-breeding/',
+    label: 'Swordtail Fish Care Guide',
+    summary: 'adult size, lifespan, tank size, tank mates, feeding and breeding',
+  },
+  'zebra-danio': {
+    href: '/guides/zebra-danio-fish-care/',
+    label: 'Zebra Danio Care Guide',
+    summary: 'adult size, lifespan, tank size, tank mates and feeding',
+  },
 }
 
 export const mainSiteGuide = (slug: string): MainSiteGuide | null => MAIN_SITE_GUIDES[slug] ?? null
+
+// Species whose symptom and treatment guide lives on the main site.
+const CLOWNFISH_HEALTH_SLUGS = new Set([
+  'ocellaris-clownfish',
+  'percula-clownfish',
+  'true-percula-clownfish',
+  'tomato-clownfish',
+  'maroon-clownfish',
+])
+
+export const hasClownfishHealthGuide = (slug: string): boolean => CLOWNFISH_HEALTH_SLUGS.has(slug)

@@ -3,7 +3,7 @@ import { careGuideHref } from '@/lib/consolidated'
 import type { Metadata } from 'next'
 import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
 import { resolveSpeciesTitle } from '@/lib/species-meta'
-import { mainSiteGuide } from '@/lib/main-site-guides'
+import { hasClownfishHealthGuide, mainSiteGuide } from '@/lib/main-site-guides'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
 import TableOfContents from '@/components/TableOfContents'
@@ -135,6 +135,14 @@ export default async function SpeciesEncyclopediaPage(
               <CalloutBox variant="ok">
                 <strong>In-depth guide:</strong> our{' '}
                 <a href={mainGuide.href}>{mainGuide.label}</a> covers {mainGuide.summary}.
+              </CalloutBox>
+            )}
+
+            {hasClownfishHealthGuide(species.slug) && (
+              <CalloutBox variant="ok">
+                <strong>Sick fish?</strong> Our guide to{' '}
+                <a href="/aquarium-fish-diseases/clownfish/">clownfish health problems</a> matches each
+                symptom to the likely disease and its treatment.
               </CalloutBox>
             )}
 
