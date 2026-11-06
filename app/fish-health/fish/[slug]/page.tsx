@@ -4,6 +4,13 @@ import { getHealthPagesByFish } from '@/lib/fish-health'
 import type { HealthPageSummary, ProblemCategory } from '@/types/fish-health'
 import sql from '@/lib/db'
 import { healthHref, consolidatedFishUrl } from '@/lib/consolidated'
+import { mainSiteGuide } from '@/lib/main-site-guides'
+
+// How searchers name the fish when it differs from the species' common name.
+const HUB_NAMES: Record<string, string> = { oscar: 'Oscar Fish' }
+const hubName = (slug: string, commonName: string) => HUB_NAMES[slug] ?? commonName
+
+const withArticle = (name: string) => `${/^[aeiou]/i.test(name) ? 'an' : 'a'} ${name}`
 
 // Rendered on first request, then served from the ISR cache (see ../../[slug]/page.tsx
 // for why generateStaticParams must exist and return nothing).
@@ -42,7 +49,7 @@ const CATEGORY_SECTIONS: Array<{
     key: 'physical',
     heading: (fish) => `${fish} Physical Symptoms`,
     intro: (fish) =>
-      `Visible changes to the body or fins of a ${fish} — colour fading, swelling, clamped or torn fins, ` +
+      `Visible changes to the body or fins of ${withArticle(fish)} — colour fading, swelling, clamped or torn fins, ` +
       `bulging eyes, a curved spine — narrow the diagnosis quickly because each has a short list of ` +
       `likely causes. These guides walk through that list, from the most common cause to the rarest, ` +
       `and say when a symptom means the fish should be isolated.`,
@@ -51,7 +58,7 @@ const CATEGORY_SECTIONS: Array<{
     key: 'disease',
     heading: (fish) => `${fish} Diseases`,
     intro: (fish) =>
-      `Parasites, bacterial infections and fungus each leave a recognisable signature on a ${fish}: ` +
+      `Parasites, bacterial infections and fungus each leave a recognisable signature on ${withArticle(fish)}: ` +
       `white spots, red streaks, fuzzy growth, rot at the fin edges. These guides identify the ` +
       `pathogen from what you can see, give the treatment that works for that species and water type, ` +
       `and explain how long recovery normally takes.`,
@@ -67,13 +74,14 @@ export async function generateMetadata(
   if (!species) return { title: 'Fish Not Found' }
   // Long species names push the description past the 160-character SERP
   // limit; drop the scientific name before anything else.
+  const name = hubName(params.slug, species.common_name)
   const tail = 'grouped by behavior, physical symptoms and disease — causes, diagnosis and treatment for each.'
-  const withSci = `All the common ${species.common_name} health problems (${species.scientific_name}) ${tail}`
+  const withSci = `All the common ${name} health problems (${species.scientific_name}) ${tail}`
   const description = withSci.length <= 160
     ? withSci
-    : `All the common ${species.common_name} health problems ${tail}`
+    : `All the common ${name} health problems ${tail}`
   return {
-    title: `${species.common_name} Health Problems & Symptoms`,
+    title: `${name} Health Problems & Symptoms`,
     description,
     alternates: { canonical: `${SITE_URL}/fish-health/fish/${params.slug}` },
   }
@@ -179,7 +187,7 @@ export default async function FishHealthListPage(
             <span style={{ color: 'rgba(255,255,255,.85)' }}>{fish}</span>
           </div>
           <div className="sp-tag">Health Guides</div>
-          <h1>{fish} Health Problems</h1>
+          <h1>{hubName(species.slug, fish)} Health Problems</h1>
           <p className="sci-name">
             {species.scientific_name} — {pages.length} health guides
           </p>
@@ -188,7 +196,7 @@ export default async function FishHealthListPage(
 
       <div className="con" style={{ padding: '36px 22px 60px' }}>
         <div style={{ marginBottom: 24, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-          <a href={`/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
+          <a href={mainSiteGuide(species.slug)?.href ?? `/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
             ← View full {fish} care guide
           </a>
           <a href="/fish-health" style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
