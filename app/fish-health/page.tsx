@@ -464,9 +464,10 @@ export default async function FishHealthHubPage() {
             </li>
           </ol>
           <div className="callout callout-warn">
-            <strong>Not sure which card fits?</strong> Describe the fish to the{' '}
-            <a href={`${SITE_URL}/#symptom-checker`}>FishCare AI symptom checker</a> — it asks the
-            follow-up questions a vet would and points you to the most likely guide.
+            <strong>Not sure which card fits?</strong> Test your water first with the free{' '}
+            <a href={`${SITE_URL}/tools/water-parameter-checker/`}>water parameter checker</a>. Water
+            problems can cause or worsen many symptoms, so a result in the danger zone is the first
+            thing to fix.
           </div>
         </section>
 
@@ -584,14 +585,15 @@ export default async function FishHealthHubPage() {
         </section>
 
         {/* CTA */}
-        <div className="cta-box" style={{ maxWidth: 860 }}>
-          <h3>🤖 Use the AI Fish Disease Symptom Checker</h3>
+        {/* Plain HTML is the free-tool version; /assets/app-cta.js swaps it on iPhone. */}
+        <div className="cta-box" data-app-cta="fish-health-hub" style={{ maxWidth: 860 }}>
+          <h3>🧪 Test your water first</h3>
           <p>
-            Not sure which fish disease you are looking at? Describe your fish&apos;s symptoms to
-            FishCare AI and get an instant, species-specific diagnosis with treatment steps.
+            Ammonia, nitrite and temperature problems can cause or worsen many fish symptoms. Enter
+            your readings in our free water parameter checker to see what&apos;s out of range.
           </p>
-          <a className="btn" href={`${SITE_URL}/#symptom-checker`}>
-            Open Symptom Checker →
+          <a className="btn" href={`${SITE_URL}/tools/water-parameter-checker/`}>
+            Check My Water →
           </a>
         </div>
 

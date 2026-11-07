@@ -251,6 +251,18 @@ export default async function FishHealthDiagnosisPage(
               </>
             )}
 
+            {/* Plain HTML is the free-tool version; /assets/app-cta.js swaps it on iPhone. */}
+            <div className="cta-box" data-app-cta="fish-health" style={{ background: 'linear-gradient(135deg, #0F3D5E, #2E9E7D)', margin: '22px 0' }}>
+              <h3>🧪 Test your water first</h3>
+              <p>
+                Ammonia, nitrite and temperature problems can cause or worsen many fish symptoms. Enter
+                your readings in our free water parameter checker to see what&apos;s out of range.
+              </p>
+              <a className="btn" href={`${SITE_URL}/tools/water-parameter-checker/`}>
+                Check My Water →
+              </a>
+            </div>
+
             {/* How to Fix */}
             {content.treatment_steps?.length > 0 && (
               <>
@@ -292,17 +304,6 @@ export default async function FishHealthDiagnosisPage(
                 </a>
               </div>
             )}
-
-            <div className="cta-box" style={{ background: 'linear-gradient(135deg, #0F3D5E, #2E9E7D)', marginTop: 0 }}>
-              <h3>🔬 AI Symptom Checker</h3>
-              <p>
-                Not sure what&apos;s wrong? Describe your fish&apos;s symptoms to the FishCare AI
-                and get an instant diagnosis.
-              </p>
-              <a className="btn" href={`${SITE_URL}/#symptom-checker`}>
-                Check Symptoms →
-              </a>
-            </div>
 
             {/* Related problems */}
             {relatedLinks.length > 0 && (

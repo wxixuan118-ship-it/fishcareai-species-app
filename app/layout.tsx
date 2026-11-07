@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="/assets/site-compliance.js?v=20260923-analytics"
           strategy="afterInteractive"
         />
+        <Script src="/assets/app-cta.js?v=20261107" strategy="afterInteractive" />
       </body>
     </html>
   )
