@@ -1,5 +1,5 @@
 import sql from './db'
-import { RETIRED_HEALTH_SLUGS, isRetiredHealth } from './consolidated'
+import { RETIRED_HEALTH_SLUGS, isRetiredHealth, consolidatedFishUrl } from './consolidated'
 import type {
   FishHealthPage,
   FishHealthContent,
@@ -131,7 +131,16 @@ export async function getHealthSpeciesList(): Promise<HealthSpeciesSummary[]> {
     GROUP BY s.slug, s.common_name, s.scientific_name
     ORDER BY s.common_name
   `
-  return rows
+  // Two species rows can resolve to the same consolidated guide — Percula and
+  // "True Percula" both point at /aquarium-fish-diseases/percula-.../ — so keep
+  // only the first entry alphabetically instead of listing the same page twice.
+  const seen = new Set<string>()
+  return rows.filter((row) => {
+    const target = consolidatedFishUrl(row.slug) ?? row.slug
+    if (seen.has(target)) return false
+    seen.add(target)
+    return true
+  })
 }
 
 export type HealthExample = {
