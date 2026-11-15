@@ -125,6 +125,7 @@ export default async function FishHealthListPage(
   if (!pages.length) notFound()
 
   const fish      = species.common_name
+  const guide     = mainSiteGuide(species.slug)
   const canonical = `${SITE_URL}/fish-health/fish/${species.slug}`
   const imgSrc    = `${SITE_URL}/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`
 
@@ -196,8 +197,13 @@ export default async function FishHealthListPage(
 
       <div className="con" style={{ padding: '36px 22px 60px' }}>
         <div style={{ marginBottom: 24, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-          <a href={mainSiteGuide(species.slug)?.href ?? `/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
-            ← View full {fish} care guide
+          {guide && (
+            <a href={guide.href} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
+              ← {guide.label}
+            </a>
+          )}
+          <a href={`/species/${species.slug}`} style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
+            ← {fish} species profile
           </a>
           <a href="/fish-health" style={{ color: 'var(--p)', fontSize: '0.9rem' }}>
             ← Fish Health Hub
