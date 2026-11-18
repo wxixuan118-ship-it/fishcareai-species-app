@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { careGuideHref } from '@/lib/consolidated'
 import type { Metadata } from 'next'
 import { getSpeciesBySlug, hasPublishedGuide } from '@/lib/species'
-import { resolveSpeciesTitle } from '@/lib/species-meta'
+import { resolveSpeciesTitle, SPECIES_META_OVERRIDES } from '@/lib/species-meta'
 import { hasClownfishHealthGuide, mainSiteGuide } from '@/lib/main-site-guides'
 import SpeciesHero from '@/components/SpeciesHero'
 import QuickFactsCard from '@/components/QuickFactsCard'
@@ -35,8 +35,9 @@ export async function generateMetadata(
   const species = await getSpeciesBySlug(params.slug)
   if (!species) return { title: 'Species Not Found' }
 
-  const title       = resolveSpeciesTitle(species.meta_title, species.common_name, species.scientific_name)
-  const description = species.meta_description ?? `Full ${species.common_name} species profile: classification, natural habitat, water requirements, behavior, and care overview for ${species.scientific_name}.`
+  const override    = SPECIES_META_OVERRIDES[species.slug]
+  const title       = override?.title ?? resolveSpeciesTitle(species.meta_title, species.common_name, species.scientific_name)
+  const description = override?.description ?? species.meta_description ?? `Full ${species.common_name} species profile: classification, natural habitat, water requirements, behavior, and care overview for ${species.scientific_name}.`
   const canonical   = `${SITE_URL}/species/${species.slug}`
 
   return {

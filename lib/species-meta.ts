@@ -51,3 +51,16 @@ export function resolveSpeciesTitle(
   if (stored && stored.length <= MAX_TITLE_LENGTH) return stored
   return buildSpeciesTitle(commonName, scientificName)
 }
+
+/**
+ * Per-slug metadata that wins over the database. Used when a profile's stored
+ * meta_title competes with a main-site care guide for the same query: the
+ * profile keeps the "species profile" intent and leaves "care" to the guide.
+ */
+export const SPECIES_META_OVERRIDES: Record<string, { title: string; description: string }> = {
+  angelfish: {
+    title: 'Freshwater Angelfish Species Profile',
+    description:
+      'Freshwater angelfish (Pterophyllum scalare) species profile: classification, Amazon habitat, wild and captive-bred forms, adult size, behavior and water ranges.',
+  },
+}
