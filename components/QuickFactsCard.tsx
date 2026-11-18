@@ -1,4 +1,5 @@
 import type { Species } from '@/types/species'
+import { cleanOrigin } from '@/lib/species-fields'
 
 interface Props {
   species: Species
@@ -11,6 +12,7 @@ const DIFFICULTY_CLASS: Record<string, string> = {
 }
 
 export default function QuickFactsCard({ species }: Props) {
+  const origin = cleanOrigin(species.slug, species.origin)
   const diffClass = species.difficulty_level ? DIFFICULTY_CLASS[species.difficulty_level] : 'bgood'
   const diffLabel = species.difficulty_level
     ? species.difficulty_level.charAt(0).toUpperCase() + species.difficulty_level.slice(1)
@@ -41,10 +43,10 @@ export default function QuickFactsCard({ species }: Props) {
               <td><em>{species.genus}</em></td>
             </tr>
           )}
-          {species.origin && (
+          {origin && (
             <tr>
               <td>Origin</td>
-              <td>{species.origin}</td>
+              <td>{origin}</td>
             </tr>
           )}
           {species.physical?.size_cm && (

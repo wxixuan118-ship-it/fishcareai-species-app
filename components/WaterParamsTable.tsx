@@ -1,10 +1,12 @@
 import type { SpeciesEnvironment } from '@/types/species'
+import { formatHardness } from '@/lib/species-fields'
 
 interface Props {
   env: SpeciesEnvironment
 }
 
 export default function WaterParamsTable({ env }: Props) {
+  const hardness = formatHardness(env.hardness_dgh)
   return (
     <table className="ptbl">
       <thead>
@@ -25,11 +27,11 @@ export default function WaterParamsTable({ env }: Props) {
           <td>{env.ph_min}–{env.ph_max}</td>
           <td>Avoid sudden swings</td>
         </tr>
-        {env.hardness_dgh && (
+        {hardness && (
           <tr>
-            <td>Hardness (GH)</td>
-            <td>{env.hardness_dgh} dGH</td>
-            <td>Soft to moderately hard</td>
+            <td>{hardness.isKh ? 'Hardness (KH)' : 'Hardness (GH)'}</td>
+            <td>{hardness.value}</td>
+            <td>{hardness.note}</td>
           </tr>
         )}
         <tr>

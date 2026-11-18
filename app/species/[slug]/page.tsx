@@ -10,6 +10,7 @@ import TableOfContents from '@/components/TableOfContents'
 import WaterParamsTable from '@/components/WaterParamsTable'
 import CalloutBox from '@/components/CalloutBox'
 import RelatedSpeciesLinks from '@/components/RelatedSpeciesLinks'
+import { cleanAppearance, cleanOrigin } from '@/lib/species-fields'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -81,6 +82,7 @@ export default async function SpeciesEncyclopediaPage(
   // so only link to it when there is one.
   const hasGuide    = await hasPublishedGuide(species.id)
   const mainGuide   = mainSiteGuide(species.slug)
+  const origin      = cleanOrigin(species.slug, species.origin)
 
   // Schema.org JSON-LD
   const breadcrumbSchema = {
@@ -177,8 +179,8 @@ export default async function SpeciesEncyclopediaPage(
                     <td style={{ textTransform: 'capitalize' }}>{species.water_type}</td>
                   </tr>
                 )}
-                {species.origin && (
-                  <tr><td>Native range</td><td>{species.origin}</td></tr>
+                {origin && (
+                  <tr><td>Native range</td><td>{origin}</td></tr>
                 )}
               </tbody>
             </table>
@@ -189,7 +191,7 @@ export default async function SpeciesEncyclopediaPage(
 
             {/* Appearance */}
             <h2 id="appearance">{species.common_name} Appearance &amp; Size</h2>
-            <p>{species.sections.appearance}</p>
+            <p>{cleanAppearance(species)}</p>
             {species.physical?.color && (
               <CalloutBox>
                 <strong>Coloration:</strong> {species.physical.color}

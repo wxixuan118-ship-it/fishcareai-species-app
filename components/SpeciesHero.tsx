@@ -1,6 +1,7 @@
 'use client'
 
 import type { Species } from '@/types/species'
+import { cleanOrigin, shortOrigin } from '@/lib/species-fields'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fishcareai.com'
 
@@ -24,6 +25,7 @@ export default function SpeciesHero({ species }: Props) {
   const imgSrc = `/assets/encyclopedia/real/${species.slug}-wikimedia-real.jpg`
   const fallbackSrc = `/assets/encyclopedia/generated-species/${species.slug}-fishcare-ai-fallback.svg`
 
+  const origin     = shortOrigin(cleanOrigin(species.slug, species.origin))
   const waterLabel = species.water_type ? WATER_TYPE_LABEL[species.water_type] : 'Freshwater'
   const diffLabel  = species.difficulty_level ? DIFFICULTY_LABEL[species.difficulty_level] : ''
 
@@ -52,7 +54,7 @@ export default function SpeciesHero({ species }: Props) {
         </div>
 
         <div className="sp-tag">
-          🌿 {waterLabel} · {species.origin?.split('(')[0].trim() ?? 'Tropical'}
+          🌿 {waterLabel} · {origin ?? 'Tropical'}
         </div>
 
         <h1>{species.common_name}</h1>
@@ -62,9 +64,9 @@ export default function SpeciesHero({ species }: Props) {
         </div>
 
         <div className="sp-meta-row">
-          {species.origin && (
+          {origin && (
             <div className="sp-meta-item">
-              🏠 <strong>Origin:</strong>&nbsp;{species.origin.split('(')[0].trim()}
+              🏠 <strong>Origin:</strong>&nbsp;{origin}
             </div>
           )}
           {species.physical?.size_cm && (
