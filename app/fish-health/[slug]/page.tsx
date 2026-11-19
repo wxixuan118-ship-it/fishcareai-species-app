@@ -100,6 +100,22 @@ export async function generateMetadata(
   }
 }
 
+// ── Treatment schedule links ──────────────────────────────────────────────────
+// White spots → ich schedule (marine species get the saltwater guide);
+// fin rot / torn fins → fin rot plan (freshwater and brackish only).
+function treatmentGuideFor(problemSlug: string, waterType: string | null) {
+  const marine = waterType === 'saltwater'
+  if (problemSlug === 'white-spots' || problemSlug === 'spots-on-fins') {
+    return marine
+      ? { lead: 'If the spots look like grains of salt, it is likely marine ich. Follow the', href: '/guides/saltwater-ich-treatment/', label: 'saltwater ich treatment guide', tail: ' for copper and tank-transfer timing.' }
+      : { lead: 'If the spots look like grains of salt, it is likely ich. Follow the', href: '/guides/ich-treatment/', label: 'day-by-day ich treatment schedule', tail: ': what to use, how long it takes and when to stop.' }
+  }
+  if (!marine && (problemSlug === 'fin-rot' || problemSlug === 'torn-fins')) {
+    return { lead: 'For fins that keep fraying or show a white or red edge, follow the', href: '/guides/fin-rot-treatment/', label: 'fin rot treatment plan', tail: ': water changes, when to use an antibiotic and when to stop.' }
+  }
+  return null
+}
+
 // ── Page component ────────────────────────────────────────────────────────────
 export default async function FishHealthDiagnosisPage(
   { params }: { params: { slug: string } }
@@ -128,6 +144,7 @@ export default async function FishHealthDiagnosisPage(
   // The care-guide route 404s unless a published species_guides row exists.
   const hasGuide     = await hasPublishedGuide(species.id)
   const overviewHref = healthOverviewHref(species.slug)
+  const treatmentGuide = treatmentGuideFor(problem.slug, species.water_type)
 
   const tocItems = buildTocItems({
     causes:      (content.common_causes?.length ?? 0) > 0,
@@ -269,6 +286,16 @@ export default async function FishHealthDiagnosisPage(
                 <h2 id="fix">How to Treat {subject}</h2>
                 <NumberedSteps steps={content.treatment_steps} />
               </>
+            )}
+
+            {/* Day-by-day treatment schedules on the website (ich / fin rot pages only) */}
+            {treatmentGuide && (
+              <CalloutBox>
+                {treatmentGuide.lead}{' '}
+                <a href={`${SITE_URL}${treatmentGuide.href}`}>{treatmentGuide.label}</a>
+                {treatmentGuide.tail} Track temperature and test results each day in the free{' '}
+                <a href={`${SITE_URL}/tools/aquarium-log/`}>aquarium log</a>.
+              </CalloutBox>
             )}
 
             {/* Prevention */}
