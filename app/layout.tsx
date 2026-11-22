@@ -17,6 +17,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-global-chrome="false">
+      <head>
+        {/* Shared navbar look, served by the www site (same file as every static page). */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link id="fishcare-nav-styles" rel="stylesheet" href="/assets/site-navigation.css?v=20261122b" />
+      </head>
       <body>
         <NavBar />
         <main>{children}</main>

@@ -14,15 +14,17 @@ type NavItem = {
   extraClass?: string
 }
 
+// Mirrors NAV_ITEMS in www assets/site-compliance.js — keep both in sync.
 const NAV: NavItem[] = [
-  { label: 'Home',          href: SITE_URL },
-  { label: 'Guides',        href: `${SITE_URL}/guides/` },
+  { label: 'Home',          href: `${SITE_URL}/` },
   { label: 'Tools',         href: `${SITE_URL}/tools/` },
-  { label: 'Encyclopedia',  href: `${SITE_URL}/species`,   activePath: '/species' },
+  { label: 'Guides',        href: `${SITE_URL}/guides/` },
+  { label: 'Encyclopedia',  href: `${SITE_URL}/species`,        activePath: '/species' },
+  { label: 'Compatibility', href: `${SITE_URL}/compatibility/` },
   { label: 'Fish Health',   href: '/fish-health', internal: true, activePath: '/fish-health' },
-  { label: 'Fish Identify', href: 'https://identify.fishcareai.com/' },
+  { label: 'Fish ID',       href: `${SITE_URL}/identify/` },
+  { label: 'App',           href: `${SITE_URL}/app/`,           extraClass: 'nl-app-btn' },
   { label: 'About',         href: `${SITE_URL}/about/` },
-  { label: '📱 App',        href: `${SITE_URL}/app/`,       extraClass: 'nl-app-btn' },
 ]
 
 export default function NavBar() {
@@ -54,9 +56,9 @@ export default function NavBar() {
   }, [])
 
   return (
-    <nav className="nb" id="navbar" ref={navRef}>
+    <nav className="nb fishcare-global-nav" id="fishcare-global-navigation" aria-label="Main navigation" ref={navRef}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <a className="brand" href={SITE_URL} title="FishCare AI" onClick={close}>
+      <a className="brand" href={`${SITE_URL}/`} aria-label="FishCare AI home" onClick={close}>
         <img
           src={`${SITE_URL}/assets/fishcare-logo.svg`}
           alt="FishCare AI"
@@ -66,7 +68,7 @@ export default function NavBar() {
         />
       </a>
 
-      <div className={`nlinks${menuOpen ? ' open' : ''}`} id="nlinks">
+      <div className={`nlinks${menuOpen ? ' open' : ''}`} id="fishcare-nlinks">
         {NAV.map((item) => {
           const active = isActive(item)
           const cls = `nl${active ? ' act' : ''}${item.extraClass ? ' ' + item.extraClass : ''}`
@@ -100,7 +102,7 @@ export default function NavBar() {
         onClick={toggle}
         aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={menuOpen}
-        aria-controls="nlinks"
+        aria-controls="fishcare-nlinks"
         type="button"
       >
         <span /><span /><span />
